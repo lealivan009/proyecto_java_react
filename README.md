@@ -1,13 +1,12 @@
 ## ⚙️Backend:
-↪ Desarrollar una API RESTful utilizando Java para manejar las
+Desarrollar una API RESTful utilizando Java para manejar las
 siguientes funcionalidades:
-→ Gestión de turnos médicos, incluyendo la creación,
-lectura, actualización y eliminación de turnos.
-→ Visualización de la cartilla de especialistas con sus
+↪ Gestión de turnos médicos, incluyendo la creación, lectura, 
+actualización y eliminación de turnos.
+↪ Visualización de la cartilla de especialistas con sus 
 respectivos horarios y áreas de especialización.
-→ Descarga de recetas médicas para pacientes
+↪ Descarga de recetas médicas para pacientes
 autorizados.
-
 ↪ Utilizar el patrón de diseño DAO (Data Access Object) o
 Repository para acceder y manipular los datos en la capa de
 persistencia.
@@ -17,13 +16,13 @@ integridad de la información ingresada por los usuarios.
 base de datos relacional.
 
 ## 📲Frontend:
-↪ Diseñar una interfaz de usuario intuitiva y amigable utilizando
+Diseñar una interfaz de usuario intuitiva y amigable utilizando
 React para permitir a los usuarios:
-→ Solicitar turnos médicos, seleccionando el especialista, la
+↪ Solicitar turnos médicos, seleccionando el especialista, la
 fecha y la hora deseada.
-→ Visualizar la cartilla de especialistas con filtros por área
+↪ Visualizar la cartilla de especialistas con filtros por área
 de especialización y horarios disponibles.
-→ Descargar recetas médicas proporcionando la
+↪ Descargar recetas médicas proporcionando la
 información del paciente y el especialista.
 
 ↪ Utilizar componentes de React para estructurar la interfaz de

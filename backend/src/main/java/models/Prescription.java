@@ -11,15 +11,11 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Builder
-@Table(name = "users")
-public class User extends BaseEntity {
-    
-    private String email;
-    private String password;
-    private String photo;
-    private String name;
-    private String lastname;
-    private String dni;
-    private String medicalInsurance;
-
+@Table(name="prescriptions")
+public class Prescription extends BaseEntity {
+    private Turno emissionDate;
+    private String patientName;
+    private String medicamentDescription;
+    private String posology;
+    private int durationTratament;
 }

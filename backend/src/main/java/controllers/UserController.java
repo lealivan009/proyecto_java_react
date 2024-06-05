@@ -16,43 +16,43 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserController {
 
-    @Inject
-    UserService userService;
+    // @Inject
+    // UserService userService;
 
-    @GET
-    public List<User> getAllUsers() {
-    	System.out.println("All users was showed");
-        return userService.listAllUsers();
-    }
+    // @GET
+    // public List<User> getAllUsers() {
+    // 	System.out.println("All users was showed");
+    //     return userService.listAllUsers();
+    // }
 
-    @POST
-    public Response createUser(User user) {
-        userService.addUser(user);
-        System.out.println("A user was created");
-        return Response.status(Response.Status.CREATED).build();
-    }
+    // @POST
+    // public Response createUser(User user) {
+    //     userService.addUser(user);
+    //     System.out.println("A user was created");
+    //     return Response.status(Response.Status.CREATED).build();
+    // }
 
-    @GET
-    @Path("/{id}")
-    public User getUserById(@PathParam("id") Long id) {
-    	System.out.println("One user was showed whit id: "+ id);
-        return userService.findUserById(id);
-    }
+    // @GET
+    // @Path("/{id}")
+    // public User getUserById(@PathParam("id") Long id) {
+    // 	System.out.println("One user was showed whit id: "+ id);
+    //     return userService.findUserById(id);
+    // }
 
-    @PUT
-    @Path("/{id}")
-    public Response updateUser(@PathParam("id") Long id, User user) {
-        user.setId(id);
-        userService.updateUser(user);
-        System.out.println("One user was updated whit id: "+ id);
-        return Response.ok().build();
-    }
+    // @PUT
+    // @Path("/{id}")
+    // public Response updateUser(@PathParam("id") Long id, User user) {
+    //     // user.setId(id);
+    //     userService.updateUser(user);
+    //     System.out.println("One user was updated whit id: "+ id);
+    //     return Response.ok().build();
+    // }
 
-    @DELETE
-    @Path("/{id}")
-    public Response deleteUser(@PathParam("id") Long id) {
-        userService.deleteUser(id);
-        System.out.println("One user was deleted whit id: "+ id);
-        return Response.noContent().build();
-    }
+    // @DELETE
+    // @Path("/{id}")
+    // public Response deleteUser(@PathParam("id") Long id) {
+    //     userService.deleteUser(id);
+    //     System.out.println("One user was deleted whit id: "+ id);
+    //     return Response.noContent().build();
+    // }
 }

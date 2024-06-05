@@ -16,16 +16,14 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Builder
-@Table(name="prescriptions")
-public class Prescription extends BaseEntity {
+@Table(name="schedules")
+public class Schedules extends BaseEntity {
+    @Column(name="name_day")
+    private String nameDay;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="emission_date")
-    private Date emissionDate;
-    @Column(name="patient_name")
-    private String patientName;
-    @Column(name="medicament_description")
-    private String medicamentDescription;
-    private String posology;
-    @Column(name="duration_tratament")
-    private int durationTratament;
+    @Column(name="start_time")
+    private Date startTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="end_time")
+    private Date endTime;
 }

@@ -2,7 +2,10 @@ package models;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -20,7 +23,10 @@ import lombok.Setter;
 public class Medical extends BaseEntity {
     private String fullname;
     private String matricule;
+    @Column(name="consulting_place")
     private String consultingPlace;
+    @Enumerated(EnumType.STRING)
+    @Column(name="speciality_type")
     private SpecialityType specialityType;
     @ManyToMany
     @JoinTable(
@@ -28,5 +34,5 @@ public class Medical extends BaseEntity {
         joinColumns = @JoinColumn(name = "medicals_id"),
         inverseJoinColumns = @JoinColumn(name="schedules_id")
     )
-    private List<Turno> consultingDates;
+    private List<Schedules> consultingDates;
 }

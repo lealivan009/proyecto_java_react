@@ -1,5 +1,6 @@
 package models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class User extends BaseEntity {
     private String name;
     private String lastname;
     private String dni;
+    @Column(name="medical_insurance")
     private String medicalInsurance;
 
 }

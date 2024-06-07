@@ -8,6 +8,7 @@ import java.util.List;
 
 import models.Appointment;
 import repositories.AppointmentRepository;
+import java.util.UUID;
 
 @Transactional
 public class AppointmentService {
@@ -20,7 +21,7 @@ public class AppointmentService {
         return appointmentRepository.listAll();
     }
 
-    public Appointment getAppointmentById(Long id) {
+    public Appointment getAppointmentById(UUID id) {
         return appointmentRepository.findById(id);
     }
 }

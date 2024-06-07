@@ -8,6 +8,7 @@ import Exception.UserException;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.response.FullUserDto;
+import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -35,7 +36,9 @@ public class UserServiceImp implements UserService {
         if (userEntity.isPresent())
             throw new UserException("User with email [" + userRegister.email() + "] is already exist!");
 
-        userRepo.persist(UserMapper.dtoToUser(userRegister));
+        User userToPersist = UserMapper.dtoToUser(userRegister);
+        userToPersist.setPassword(BcryptUtil.bcryptHash(userToPersist.getPassword()));
+        userRepo.persist(userToPersist);
     }
     
     @Override
@@ -43,7 +46,7 @@ public class UserServiceImp implements UserService {
         validateUser(userLogin);
 
         User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("email o contraseña incorrectos"));
-        if(!userEntity.getPassword().equals(userLogin.password()))
+        if(!BcryptUtil.matches(userLogin.password(), userEntity.getPassword()))
             throw new Exception("email o contraseña incorrectos");
 
         return UserMapper.userToDto(userEntity);

@@ -9,6 +9,5 @@ public record FullUserDto(
     String photo,
     String name,
     String lastname,
-    String dni,
-    String medicalInsurance
+    String dni
 ) {}

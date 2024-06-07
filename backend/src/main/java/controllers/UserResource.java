@@ -5,6 +5,7 @@ import services.UserService;
 
 import java.util.UUID;
 
+import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -20,9 +21,16 @@ public class UserResource {
     private UserService userService;
 
     @POST
+    @Path("/register")
     public Response registerUser(UserDtoRegister userRegister) throws Exception {
         userService.registerAndSave(userRegister);
         return Response.status(Response.Status.CREATED).build();
+    }
+
+    @POST
+    @Path("/login")
+    public Response LoginUser(UserDtoLogin userLogin) throws Exception {
+        return Response.ok(userService.loginUser(userLogin)).build();
     }
 
     @GET

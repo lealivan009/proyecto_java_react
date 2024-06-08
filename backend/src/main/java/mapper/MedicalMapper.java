@@ -2,7 +2,7 @@ package mapper;
 
 import dto.request.MedicalDtoRegister;
 import models.Medical;
-import models.SpecialityType;
+import models.enumerations.SpecialityType;
 
 public class MedicalMapper {
     

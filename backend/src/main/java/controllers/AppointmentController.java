@@ -32,6 +32,7 @@ public class AppointmentController {
 
     @POST
     public Response createAppointment(Appointment appointment){
-        return appointmentService.createAppointment(appointment);
+        return Response.ok(appointmentService.createAppointment(appointment)).build();
+        //lanzar excepcion si medico/usuario/horario no disponible/encontrado
     }
 }

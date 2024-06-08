@@ -7,6 +7,7 @@ import java.util.UUID;
 import Exception.UserException;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
+import dto.request.UserDtoUpdate;
 import dto.response.FullUserDto;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -61,10 +62,27 @@ public class UserServiceImp implements UserService {
         return userRepo.findByIdOptional(id).orElseThrow(() -> new Exception("User not exist with id [ " + id + "]"));
     }
 
+    @Transactional
     @Override
-    public User updateUser(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+    public void updateUser(UUID id, UserDtoUpdate userUpdate) throws Exception {
+        User userEntity = findUserById(id);
+        
+        if(userUpdate.email() != null)
+            userEntity.setEmail(userUpdate.email());
+        if(userUpdate.name() != null)
+            userEntity.setName(userUpdate.name());
+        if(userUpdate.lastname() != null)
+            userEntity.setLastname(userUpdate.lastname());
+        if(userUpdate.dni() != null)
+            userEntity.setDni(userUpdate.dni());
+        if(userUpdate.photo() != null)
+            userEntity.setPhoto(userUpdate.photo());
+        if(userUpdate.birthDate() != null)
+            userEntity.setBirthDate(userUpdate.birthDate());
+        if(userUpdate.password() != null){
+            validateUser(userUpdate);
+            userEntity.setPassword(BcryptUtil.bcryptHash(userUpdate.password()));
+        }   
     }
 
     // valida los campos del usuario, lanza una Exception con los campos incorrectos

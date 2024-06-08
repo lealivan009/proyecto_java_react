@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
+import dto.request.UserDtoUpdate;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -33,6 +34,13 @@ public class UserController {
     @Path("/login")
     public Response LoginUser(UserDtoLogin userLogin) throws Exception {
         return Response.ok(userService.loginUser(userLogin)).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Response updateUser(@PathParam("id") UUID id, UserDtoUpdate userUpdate) throws Exception{
+        userService.updateUser(id, userUpdate);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @GET

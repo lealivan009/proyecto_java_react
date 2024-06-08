@@ -86,8 +86,8 @@ public class UserServiceImp implements UserService {
     }
 
     // valida los campos del usuario, lanza una Exception con los campos incorrectos
-    private void validateUser(Object obj) throws Exception {
-        var contrains = validator.validate(obj);
+    private void validateUser(Object objUser) throws Exception {
+        var contrains = validator.validate(objUser);
         if (!contrains.isEmpty()) {
             StringBuilder errorsMessage = new StringBuilder();
             contrains.stream()

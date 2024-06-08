@@ -9,8 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,7 +27,6 @@ public class Appointment extends PanacheEntity {
     @Column(name = "consulting_reason")
     private String consultingReason;
 
-    @Temporal(TemporalType.TIMESTAMP) //para decirle a la bd que es una fecha
     @Column(name="consulting_date")
     private LocalTime consultingDate;
 

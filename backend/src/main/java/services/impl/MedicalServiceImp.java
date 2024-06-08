@@ -1,13 +1,12 @@
 package services.impl;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
-import dto.response.FullMedicalUserDTO;
-import dto.response.FullUserDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -22,7 +21,6 @@ public class MedicalServiceImp implements MedicalService {
 
     @Inject
     private MedicalRepository medicalRepo;
-
     /**
      * Registra y guarda un nuevo médico en la base de datos.
      * 
@@ -35,20 +33,28 @@ public class MedicalServiceImp implements MedicalService {
         // Convierte el DTO a un objeto Medical
         Medical medicalPersist = MedicalMapper.dtoToMedical(medicalDtoRegister);
 
-        // Crea dos horarios de consulta para el médico (ejemplo hardcodeado)
-        Schedules schedules1 = new Schedules("Monday", new Date(2024, 6, 8, 12, 0, 0), new Date(2024, 6, 8, 14, 0, 0));
-        Schedules schedules2 = new Schedules("Tuesday", new Date(2024, 6, 8, 15, 0, 0), new Date(2024, 6, 8, 18, 0, 0));
-
-        // Agrega los horarios de consulta a una lista
-        List<Schedules> scheduleslist = new ArrayList<>();
-        scheduleslist.add(schedules1);
-        scheduleslist.add(schedules2);
-
         // Asigna la lista de horarios de consulta al médico
-        medicalPersist.setConsultingDates(scheduleslist);
+        medicalPersist.setConsultingDates(loadSchedules(medicalDtoRegister));
 
         // Persiste el médico en la base de datos
         medicalRepo.persist(medicalPersist);
+    }
+
+    private List<Schedules> loadSchedules(MedicalDtoRegister medicalDto){
+        List<Schedules> scheduleslist = new ArrayList<>(5);
+        //startTime, endTime son arreglos int[hora,minuto]
+        var startTime = LocalTime.of(medicalDto.startTime()[0], medicalDto.startTime()[1]);
+        var endTime = LocalTime.of(medicalDto.endTime()[0], medicalDto.endTime()[1]);
+
+        for (var day: DayOfWeek.values()) {
+            //carga el mismo horario de lunes a viernes
+            if(!day.equals(DayOfWeek.SUNDAY) && !day.equals(DayOfWeek.SATURDAY)){
+                scheduleslist.add(
+                    new Schedules(day, startTime, endTime, true)
+                );
+            }
+        }
+        return scheduleslist;
     }
 
     /**

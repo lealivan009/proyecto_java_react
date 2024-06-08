@@ -1,9 +1,12 @@
 package models;
 
-import java.util.Date;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -19,11 +22,14 @@ import lombok.Setter;
 @Table(name="schedules")
 public class Schedules extends BaseEntity {
     @Column(name="name_day")
-    private String nameDay;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek nameDay;
+    @Temporal(TemporalType.TIME)
     @Column(name="start_time")
-    private Date startTime;
-    @Temporal(TemporalType.TIMESTAMP)
+    private LocalTime startTime;
+    @Temporal(TemporalType.TIME)
     @Column(name="end_time")
-    private Date endTime;
+    private LocalTime endTime;
+    @Column(name="consulting_enable")
+    private boolean consultingEnable;
 }

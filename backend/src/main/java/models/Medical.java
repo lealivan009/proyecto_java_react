@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import models.enumerations.SpecialityType;
 
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor

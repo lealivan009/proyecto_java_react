@@ -1,5 +1,6 @@
 package dto.response;
 
+import java.time.LocalDate;
 import java.util.UUID;
 //Solo lo uso para recuperarlo de la base de datos y ver toda la info
 public record FullUserDto(
@@ -9,5 +10,6 @@ public record FullUserDto(
     String photo,
     String name,
     String lastname,
-    String dni
+    String dni,
+    LocalDate birthDate
 ) {}

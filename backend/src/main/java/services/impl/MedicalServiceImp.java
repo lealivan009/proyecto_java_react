@@ -1,16 +1,16 @@
 package services.impl;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
-import dto.response.FullMedicalUserDTO;
-import dto.response.FullUserDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Validator;
 import mapper.MedicalMapper;
 import models.Medical;
 import models.Schedules;
@@ -23,32 +23,45 @@ public class MedicalServiceImp implements MedicalService {
     @Inject
     private MedicalRepository medicalRepo;
 
+    @Inject
+    Validator validator;
+
     /**
      * Registra y guarda un nuevo médico en la base de datos.
      * 
      * @param medicalDtoRegister DTO con los datos de registro del médico
-     * @throws Exception si ocurre algún error durante el proceso de registro y guardado
+     * @throws Exception si ocurre algún error durante el proceso de registro y
+     *                   guardado
      */
     @Transactional
     @Override
     public void registerAndSave(MedicalDtoRegister medicalDtoRegister) throws Exception {
+        //valido campos de medico
+        validateMedical(medicalDtoRegister);
         // Convierte el DTO a un objeto Medical
         Medical medicalPersist = MedicalMapper.dtoToMedical(medicalDtoRegister);
 
-        // Crea dos horarios de consulta para el médico (ejemplo hardcodeado)
-        Schedules schedules1 = new Schedules("Monday", new Date(2024, 6, 8, 12, 0, 0), new Date(2024, 6, 8, 14, 0, 0));
-        Schedules schedules2 = new Schedules("Tuesday", new Date(2024, 6, 8, 15, 0, 0), new Date(2024, 6, 8, 18, 0, 0));
-
-        // Agrega los horarios de consulta a una lista
-        List<Schedules> scheduleslist = new ArrayList<>();
-        scheduleslist.add(schedules1);
-        scheduleslist.add(schedules2);
-
         // Asigna la lista de horarios de consulta al médico
-        medicalPersist.setConsultingDates(scheduleslist);
+        medicalPersist.setConsultingDates(loadSchedules(medicalDtoRegister));
 
         // Persiste el médico en la base de datos
         medicalRepo.persist(medicalPersist);
+    }
+
+    private List<Schedules> loadSchedules(MedicalDtoRegister medicalDto) {
+        List<Schedules> scheduleslist = new ArrayList<>(5);
+        // startTime, endTime son arreglos int[hora,minuto]
+        var startTime = LocalTime.of(medicalDto.startTime()[0], medicalDto.startTime()[1]);
+        var endTime = LocalTime.of(medicalDto.endTime()[0], medicalDto.endTime()[1]);
+
+        for (var day : DayOfWeek.values()) {
+            // carga el mismo horario de lunes a viernes
+            if (!day.equals(DayOfWeek.SUNDAY) && !day.equals(DayOfWeek.SATURDAY)) {
+                scheduleslist.add(
+                        new Schedules(day, startTime, endTime, true));
+            }
+        }
+        return scheduleslist;
     }
 
     /**
@@ -71,6 +84,17 @@ public class MedicalServiceImp implements MedicalService {
      */
     public List<Medical> findAll() {
         return medicalRepo.listAll();
+    }
+
+    private void validateMedical(Object objMedical) throws Exception {
+        var contrains = validator.validate(objMedical);
+        if (!contrains.isEmpty()) {
+            StringBuilder errorsMessage = new StringBuilder();
+            contrains.stream()
+                    .forEach(c -> errorsMessage.append(c.getMessageTemplate()).append(", "));
+            throw new Exception(errorsMessage.toString());
+        }
+
     }
 
 }

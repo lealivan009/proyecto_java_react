@@ -1,14 +1,15 @@
 package controllers;
 
-import services.AppointmentService;
+import services.impl.AppointmentServiceImp;
+
 import java.util.UUID;
+
+import dto.request.AppointmentDto;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import models.Appointment;
-import java.net.URI;
+
 
 @Path("/appointments")
 @Produces(MediaType.APPLICATION_JSON)
@@ -16,7 +17,7 @@ import java.net.URI;
 public class AppointmentController {
 
     @Inject
-    private AppointmentService appointmentService;
+    private AppointmentServiceImp appointmentService;
 
     @GET
     @Path("/{id}")
@@ -31,8 +32,9 @@ public class AppointmentController {
     }
 
     @POST
-    public Response createAppointment(Appointment appointment){
-        return Response.ok(appointmentService.createAppointment(appointment)).build();
+    public Response createAppointment(AppointmentDto appointmentDto) throws Exception{
+        appointmentService.createAppointment(appointmentDto);
+        return Response.status(Response.Status.CREATED).build();
         //lanzar excepcion si medico/usuario/horario no disponible/encontrado
     }
 }

@@ -1,16 +1,17 @@
 package services.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
-//capa de servicio que interactua con la capa de persistencia (repositorios JPA)
 import jakarta.inject.Inject;
 import mapper.AppointmentMapper;
 
-import java.util.Date;
+import java.time.LocalTime;
 import java.util.List;
 
 import models.Appointment;
+import models.Medical;
 import models.Schedules;
 import repositories.AppointmentRepository;
+import services.MedicalService;
 import services.UserService;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import dto.request.AppointmentDto;
 
 @ApplicationScoped
+//capa de servicio que interactua con la capa de persistencia (repositorios JPA)
 public class AppointmentServiceImp {
 
     //utilizo el repository que implementa a Panache y me proporciona los metodos 
@@ -26,8 +28,8 @@ public class AppointmentServiceImp {
 
     @Inject
     UserService userService;
-    /*@Inject
-    MedicalService medicalService; */
+    @Inject
+    MedicalService medicalService; 
 
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.listAll();
@@ -37,21 +39,22 @@ public class AppointmentServiceImp {
         return appointmentRepository.findById(id);
     }
 
-    public void createAppointment(AppointmentDto appointmentDto){
+    public void createAppointment(AppointmentDto appointmentDto) throws Exception{
         //busco que el usuario coincida con el usuario del turno y sino coincide ya larga la excepcion en el service
         userService.findUserById(appointmentDto.userId());
-        medicalService.findMedicalById(appointmentDto.medicalId()); //idem
+        Medical medical = medicalService.getMedicalById(appointmentDto.medicalId()); //idem
+
 
         // Obtener la lista de horarios de consulta del médico
-        List<Schedules> consultingDates = medicalService.getConsultingDates();
+        List<Schedules> consultingDates = medical.getConsultingDates();
         
         // Verificar si el horario del nuevo turno está dentro de algún horario de consulta del medico
-        Date newConsultingDate = appointmentDto.consultingDate(); //horario del nuevo turno
+        LocalTime newConsultingDate = appointmentDto.consultingDate(); //horario del nuevo turno
         boolean disponible = false;
         for (Schedules schedule : consultingDates) { //recorro la franja horaria de consultas del medico
-            Date startTime = schedule.getStartTime();
-            Date endTime = schedule.getEndTime();
-            if (newConsultingDate.after(startTime) && newConsultingDate.before(endTime)) {
+            LocalTime startTime = schedule.getStartTime();
+            LocalTime endTime = schedule.getEndTime();
+            if (newConsultingDate.isAfter(startTime) && newConsultingDate.isBefore(endTime)) {
                 disponible = true;
                 break;
             }
@@ -63,7 +66,7 @@ public class AppointmentServiceImp {
         }else{
             //uso la clase mapper para pasar de dto a entidad
             Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto);
-            appointmentRepository.persist(appointment); //metodo que me da Panache en el repository para crear el nuevo turno
+            appointmentRepository.persist(appointment); //metodo que me da Panache en el repository para crear el nuevo turno en la bd
         }
     }
 }

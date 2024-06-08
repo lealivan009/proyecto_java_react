@@ -17,7 +17,7 @@ import jakarta.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @PermitAll
-public class UserResource {
+public class UserController {
 
     @Inject
     private UserService userService;

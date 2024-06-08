@@ -1,7 +1,12 @@
 package models;
 
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +25,7 @@ public class User extends BaseEntity {
     private String name;
     private String lastname;
     private String dni;
+    @Temporal(TemporalType.DATE)
+    @Column(name ="bith_date")
+    private LocalDate birthDate;
 }

@@ -13,6 +13,7 @@ public class UserMapper {
                 .photo(register.photo())
                 .name(register.name())
                 .lastname(register.lastname())
+                .birthDate(register.birthDate())
                 .build();
     }
 
@@ -24,7 +25,8 @@ public class UserMapper {
             entity.getPhoto(),
             entity.getName(), 
             entity.getLastname(), 
-            entity.getDni()
+            entity.getDni(),
+            entity.getBirthDate()
         );
     }
 }

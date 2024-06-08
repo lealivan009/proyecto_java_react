@@ -1,5 +1,6 @@
 package models;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +19,7 @@ import lombok.Setter;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Builder
 @Table(name="appointments")
-public class Appointment extends BaseEntity {
+public class Appointment extends PanacheEntity {
 
     @Column(name = "patient_name")
     private String patientName;

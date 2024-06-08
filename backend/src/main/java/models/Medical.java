@@ -2,6 +2,7 @@ package models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,7 +29,7 @@ public class Medical extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name="speciality_type")
     private SpecialityType specialityType;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
         name="medicals_x_schedules",
         joinColumns = @JoinColumn(name = "medicals_id"),

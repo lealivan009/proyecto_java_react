@@ -27,9 +27,7 @@ public class AppointmentServiceImp {
     @Inject
     UserService userService;
     /*@Inject
-    MedicalService medicalService;
-    @Inject
-    Medical medical; */
+    MedicalService medicalService; */
 
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.listAll();
@@ -42,10 +40,10 @@ public class AppointmentServiceImp {
     public void createAppointment(AppointmentDto appointmentDto){
         //busco que el usuario coincida con el usuario del turno y sino coincide ya larga la excepcion en el service
         userService.findUserById(appointmentDto.userId());
-        //medicalService.findMedicalById(appointmentDto.medicalId()); //idem
+        medicalService.findMedicalById(appointmentDto.medicalId()); //idem
 
         // Obtener la lista de horarios de consulta del médico
-        List<Schedules> consultingDates = medical.getConsultingDates();
+        List<Schedules> consultingDates = medicalService.getConsultingDates();
         
         // Verificar si el horario del nuevo turno está dentro de algún horario de consulta del medico
         Date newConsultingDate = appointmentDto.consultingDate(); //horario del nuevo turno

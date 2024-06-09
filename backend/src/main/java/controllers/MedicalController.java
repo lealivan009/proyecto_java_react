@@ -3,11 +3,14 @@ package controllers;
 import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
+import dto.request.SchedulesDtoUpdate;
+import io.quarkus.vertx.http.runtime.attribute.ResponseHeaderAttribute;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -20,7 +23,7 @@ import jakarta.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @PermitAll
-public class MedicalResource {
+public class MedicalController {
     
     @Inject
     private MedicalService medicalService;
@@ -50,5 +53,13 @@ public class MedicalResource {
     public Response getAllUsers(){
         // Devuelve una respuesta con el estado 200 (OK)
         return Response.ok(medicalService.findAll()).build();
+    }
+
+    // Toma un Medical y modifica sus horarios
+    @PUT
+    @Path("/{id}/schedules")
+    public Response updateSchedules(@PathParam("id") UUID id, SchedulesDtoUpdate scheduleDto) throws Exception{
+        medicalService.modifySchedules(id, scheduleDto);
+        return Response.noContent().build();
     }
 }

@@ -14,11 +14,11 @@ import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Validator;
 import mapper.UserMapper;
 import models.User;
 import repositories.UserRepository;
 import services.UserService;
+import validator.Validator;
 
 @ApplicationScoped
 public class UserServiceImp implements UserService {
@@ -32,7 +32,7 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void registerAndSave(UserDtoRegister userRegister) throws Exception {
-        validateUser(userRegister);
+        validator.validate(userRegister);
         Optional<User> userEntity = userRepo.findByEmail(userRegister.email());
 
         if (userEntity.isPresent())
@@ -46,7 +46,7 @@ public class UserServiceImp implements UserService {
     
     @Override
     public UserDto loginUser(UserDtoLogin userLogin) throws Exception {
-        validateUser(userLogin);
+        validator.validate(userLogin);
 
         User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("Incorrect email or passwords"));
         if(!BcryptUtil.matches(userLogin.password(), userEntity.getPassword()))
@@ -68,6 +68,7 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void updateUser(UUID id, UserDtoUpdate userUpdate) throws Exception {
+        validator.validate(userUpdate);
         User userEntity = findUserById(id);
         
         if(userUpdate.email() != null)
@@ -82,10 +83,9 @@ public class UserServiceImp implements UserService {
             userEntity.setPhoto(userUpdate.photo());
         if(userUpdate.birthDate() != null)
             userEntity.setBirthDate(userUpdate.birthDate());
-        if(userUpdate.password() != null){
-            validateUser(userUpdate);
+        if(userUpdate.password() != null)
             userEntity.setPassword(BcryptUtil.bcryptHash(userUpdate.password()));
-        }   
+        
     }
 
     @Override
@@ -93,17 +93,6 @@ public class UserServiceImp implements UserService {
     public void deleteUser(UUID id) throws Exception {
         var userEntity = findUserById(id);
         userRepo.softDelete(userEntity);
-    }
-
-    // valida los campos del usuario, lanza una Exception con los campos incorrectos
-    private void validateUser(Object objUser) throws Exception {
-        var contrains = validator.validate(objUser);
-        if (!contrains.isEmpty()) {
-            StringBuilder errorsMessage = new StringBuilder();
-            contrains.stream()
-                    .forEach(c -> errorsMessage.append(c.getMessageTemplate()).append(", "));
-            throw new Exception(errorsMessage.toString());
-        }
     }
 
 }

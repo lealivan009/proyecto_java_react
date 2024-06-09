@@ -7,12 +7,12 @@ import dto.response.PrescriptionDtoResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Validator;
 import mapper.PrescriptionMapper;
 import models.Prescription;
 import repositories.PrescriptionRepository;
 import services.AppointmentService;
 import services.PrescriptionService;
+import validator.Validator;
 
 @ApplicationScoped
 public class PrescriptionServiceImp implements PrescriptionService {
@@ -29,7 +29,7 @@ public class PrescriptionServiceImp implements PrescriptionService {
     @Override
     @Transactional
     public void savePresciption(UUID appointmentId, PrescriptionDto prescriptionDto) throws Exception {
-        validatePrescription(prescriptionDto);
+        validator.validate(prescriptionDto);
         var prescriptionToPersist = PrescriptionMapper.dtoToEntity(prescriptionDto);
         var appointment = appointmentService.getAppointmentById(appointmentId);
 
@@ -45,16 +45,6 @@ public class PrescriptionServiceImp implements PrescriptionService {
         Prescription pres = prescriptionRepo.findByIdOptional(prescriptionId)
             .orElseThrow(()-> new Exception("Prescription not found with id "+ prescriptionId.toString()));
         return PrescriptionMapper.entityToDto(pres);
-    }
-
-    private void validatePrescription(Object objPrescription) throws Exception {
-        var contrains = validator.validate(objPrescription);
-        if (!contrains.isEmpty()) {
-            StringBuilder errorsMessage = new StringBuilder();
-            contrains.stream()
-                    .forEach(c -> errorsMessage.append(c.getMessageTemplate()).append(", "));
-            throw new Exception(errorsMessage.toString());
-        }
     }
 
 }

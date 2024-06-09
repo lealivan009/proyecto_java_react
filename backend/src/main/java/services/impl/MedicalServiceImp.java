@@ -10,12 +10,12 @@ import dto.request.SchedulesDtoUpdate;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Validator;
 import mapper.MedicalMapper;
 import models.Medical;
 import models.Schedules;
 import repositories.MedicalRepository;
 import services.MedicalService;
+import validator.Validator;
 
 @ApplicationScoped
 public class MedicalServiceImp implements MedicalService {
@@ -37,7 +37,7 @@ public class MedicalServiceImp implements MedicalService {
     @Override
     public void registerAndSave(MedicalDtoRegister medicalDtoRegister) throws Exception {
         //valido campos de medico
-        validateMedical(medicalDtoRegister);
+        validator.validate(medicalDtoRegister);
         // Convierte el DTO a un objeto Medical
         Medical medicalPersist = MedicalMapper.dtoToMedical(medicalDtoRegister);
 
@@ -100,17 +100,6 @@ public class MedicalServiceImp implements MedicalService {
      */
     public List<Medical> findAll() {
         return medicalRepo.listAll();
-    }
-
-    private void validateMedical(Object objMedical) throws Exception {
-        var contrains = validator.validate(objMedical);
-        if (!contrains.isEmpty()) {
-            StringBuilder errorsMessage = new StringBuilder();
-            contrains.stream()
-                    .forEach(c -> errorsMessage.append(c.getMessageTemplate()).append(", "));
-            throw new Exception(errorsMessage.toString());
-        }
-
     }
 
 }

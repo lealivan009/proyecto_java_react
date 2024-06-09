@@ -5,6 +5,7 @@ import services.impl.AppointmentServiceImp;
 import java.util.UUID;
 
 import dto.request.AppointmentDto;
+import dto.request.NewAppointmentDto;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -35,7 +36,7 @@ public class AppointmentController {
     @POST
     public Response createAppointment(AppointmentDto appointmentDto) throws Exception{
         appointmentService.createAppointment(appointmentDto);
-        return Response.status(Response.Status.CREATED).build();
+        return Response.status(Response.Status.OK).entity("Turno medico creado exitosamente").build();
         //lanzar excepcion si medico/usuario/horario no disponible/encontrado
     }
 
@@ -44,7 +45,20 @@ public class AppointmentController {
     //UUID como tipo de dato para id unicos en entidades JPA
     public Response deleteAppointment(@PathParam("id") UUID idUser, LocalTime consultingDate) throws Exception {
         appointmentService.deleteAppointment(idUser, consultingDate);
-        return Response.status(Response.Status.GONE).build();
+        return Response.status(Response.Status.OK).entity("Turno medico eliminado exitosamente").build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Response updateAppointment(@PathParam("id") UUID idAppointment, NewAppointmentDto newAppointmentDto) throws Exception{
+        try {
+            appointmentService.updateAppointment(idAppointment, newAppointmentDto);
+            return Response.status(Response.Status.OK).entity("Turno médico actualizado exitosamente").build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error interno del servidor").build();
+        }
     }
 
 }

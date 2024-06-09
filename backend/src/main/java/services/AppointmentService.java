@@ -5,6 +5,7 @@ import java.util.List;
 import models.Appointment;
 import java.util.UUID;
 import dto.request.AppointmentDto;
+import java.time.LocalTime;
 
 @Transactional
 //capa de servicio que interactua con la capa de persistencia (repositorios JPA)
@@ -16,7 +17,7 @@ public interface AppointmentService {
 
     public void createAppointment(AppointmentDto appointmentDto) throws Exception;
 
-    public void deleteAppoitment(UUID id);
+    public void deleteAppointment(UUID idUser, LocalTime consultingDate);
 
 }
 

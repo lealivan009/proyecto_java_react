@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.time.LocalTime;
 
 
 @Path("/appointments")
@@ -37,4 +38,13 @@ public class AppointmentController {
         return Response.status(Response.Status.CREATED).build();
         //lanzar excepcion si medico/usuario/horario no disponible/encontrado
     }
+
+    @DELETE
+    @Path("/{id}")
+    //UUID como tipo de dato para id unicos en entidades JPA
+    public Response deleteAppointment(@PathParam("id") UUID idUser, LocalTime consultingDate) throws Exception {
+        appointmentService.deleteAppointment(idUser, consultingDate);
+        return Response.status(Response.Status.GONE).build();
+    }
+
 }

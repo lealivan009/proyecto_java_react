@@ -74,9 +74,9 @@ Puede ver la documentacion completa de los recursos levantando la aplicacion e i
 http://localhost:8080/q/swagger-ui
 ```
 
-![This is an alt text.](/images/title.webp "This is a sample image.")
+![This is an alt text.](./images/title.webp "This is a sample image.")
 ### Medical Controller
-![This is an alt text.](/images/medical.webp "This is a sample image.")
+![This is an alt text.](./images/medical.webp "This is a sample image.")
 
     Register a new medical
     /api/medicals/register -> POST
@@ -93,14 +93,14 @@ http://localhost:8080/q/swagger-ui
 
 ### Specialist Controller
 
-![This is an alt text.](/images/specialist.webp "This is a sample image.")
+![This is an alt text.](./images/specialist.webp "This is a sample image.")
 
     Get all specialists
     /api/specialists -> GET
 
 ### User Controller
 
-![This is an alt text.](/images/user.webp "This is a sample image.")
+![This is an alt text.](./images/user.webp "This is a sample image.")
 
     Get all users
     /api/users -> GET
@@ -122,7 +122,7 @@ http://localhost:8080/q/swagger-ui
 
 ### Prescription Controller
 
-![This is an alt text.](/images/prescription.webp "This is a sample image.")
+![This is an alt text.](./images/prescription.webp "This is a sample image.")
 
     Post a prescription 
     /api/prescriptions/{appointmentId}

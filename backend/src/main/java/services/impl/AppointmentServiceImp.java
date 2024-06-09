@@ -13,6 +13,7 @@ import models.Schedules;
 import repositories.AppointmentRepository;
 import services.MedicalService;
 import services.UserService;
+import services.AppointmentService;
 
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ import dto.request.AppointmentDto;
 
 @ApplicationScoped
 //capa de servicio que interactua con la capa de persistencia (repositorios JPA)
-public class AppointmentServiceImp {
+public class AppointmentServiceImp implements AppointmentService{
 
     //utilizo el repository que implementa a Panache y me proporciona los metodos 
     @Inject
@@ -31,14 +32,17 @@ public class AppointmentServiceImp {
     @Inject
     MedicalService medicalService; 
 
+    @Override
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.listAll();
     }
 
+    @Override
     public Appointment getAppointmentById(UUID id) {
         return appointmentRepository.findById(id);
     }
 
+    @Override
     public void createAppointment(AppointmentDto appointmentDto) throws Exception{
         //busco que el usuario coincida con el usuario del turno y sino coincide ya larga la excepcion en el service
         userService.findUserById(appointmentDto.userId());
@@ -68,5 +72,10 @@ public class AppointmentServiceImp {
             Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto);
             appointmentRepository.persist(appointment); //metodo que me da Panache en el repository para crear el nuevo turno en la bd
         }
+    }
+
+    @Override
+    public void deleteAppoitment(UUID id){
+
     }
 }

@@ -1,6 +1,6 @@
 package models;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,9 +18,9 @@ import lombok.Setter;
 @Builder
 @Table(name="prescriptions")
 public class Prescription extends BaseEntity {
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name="emission_date")
-    private Date emissionDate;
+    private LocalDate emissionDate;
     @Column(name="patient_name")
     private String patientName;
     @Column(name="medicament_description")

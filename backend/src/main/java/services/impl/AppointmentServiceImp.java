@@ -2,6 +2,7 @@ package services.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import mapper.AppointmentMapper;
 
 import java.time.LocalTime;
@@ -43,6 +44,7 @@ public class AppointmentServiceImp implements AppointmentService{
         return appointmentRepository.findById(id);
     }
 
+    @Transactional
     public void createAppointment(AppointmentDto appointmentDto) throws Exception{
         //busco que el usuario coincida con el usuario del turno y sino coincide ya larga la excepcion en el service
         userService.findUserById(appointmentDto.userId());
@@ -73,6 +75,7 @@ public class AppointmentServiceImp implements AppointmentService{
         }
     }
 
+    @Transactional
     public void deleteAppointment(UUID idUser, LocalTime consultingDate){
         //Busco todos los turnos asociados al usuario que coincidan con la fecha y hora del turno pq sino me elimina todos los turnos de ese usuario
         List<Appointment> appointments = appointmentRepository.find("user.id = ?1 and consultingDate = ?2", idUser, consultingDate).list();

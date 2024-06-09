@@ -1,6 +1,5 @@
 package models;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +19,7 @@ import java.time.LocalTime;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Builder
 @Table(name="appointments")
-public class Appointment extends PanacheEntity {
+public class Appointment extends BaseEntity {
 
     @Column(name = "patient_name")
     private String patientName;
@@ -38,5 +37,5 @@ public class Appointment extends PanacheEntity {
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Prescription prescriptions;
+    private Prescription prescription;
 }

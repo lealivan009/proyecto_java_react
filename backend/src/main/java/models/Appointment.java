@@ -37,5 +37,5 @@ public class Appointment extends BaseEntity {
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Prescription prescriptions;
+    private Prescription prescription;
 }

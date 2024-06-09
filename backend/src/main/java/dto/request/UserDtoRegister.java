@@ -7,16 +7,18 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record UserDtoRegister(
-    @NotBlank(message = "El email es obligatorio") 
-    @Pattern(regexp = "\\p{Alpha}*@\\p{Alpha}{2,}\\.\\p{Alpha}{2,4}", message = "Email no valido") 
+    @NotBlank(message = "Email is mandatory!") 
+    @Pattern(regexp = "\\p{Alpha}*@\\p{Alpha}{2,}\\.\\p{Alpha}{2,4}", message = "Email not valid") 
     String email,
-    @NotBlank(message = "Una contraseña es obligatoria") 
-    @Size(min = 8, message = "Contraseña con minimo 8 caracteres") 
+    @NotBlank(message = "Password is mandatory") 
+    @Size(min = 8, message = "Password with minimum 8 characters") 
     String password,
-    @NotBlank(message = "Su nombre es obligatorio") String name,
-    @NotBlank(message = "Su apellido es obligatorio") String lastname,
-    @NotBlank(message = "El numero de dni es obligatorio") 
-    @Pattern(regexp = "[0-9]*", message = "Solo numeros sin punto") 
+    @NotBlank(message = "Name is mandatory")
+    String name,
+    @NotBlank(message = "Lastname is mandatory")
+    String lastname,
+    @NotBlank(message = "Dni number is mandatory") 
+    @Pattern(regexp = "[0-9]*", message = "Only numbers without points") 
     String dni,
     LocalDate birthDate,
     String photo

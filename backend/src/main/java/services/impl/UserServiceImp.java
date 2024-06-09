@@ -46,13 +46,14 @@ public class UserServiceImp implements UserService {
     public FullUserDto loginUser(UserDtoLogin userLogin) throws Exception {
         validateUser(userLogin);
 
-        User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("email o contraseña incorrectos"));
+        User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("Incorrect email or passwords"));
         if(!BcryptUtil.matches(userLogin.password(), userEntity.getPassword()))
-            throw new Exception("email o contraseña incorrectos");
+            throw new Exception("Incorrect email or passwords");
 
         return UserMapper.userToDto(userEntity);
     }
 
+    @Override
     public List<FullUserDto> findAll() {
         return userRepo.findAll().project(FullUserDto.class).list();
     }

@@ -1,29 +1,23 @@
 package services;
 
-//capa de servicio que interactua con la capa de persistencia (repositorios JPA)
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-
 import java.util.List;
-
 import models.Appointment;
-import repositories.AppointmentRepository;
-
 import java.util.UUID;
+import dto.request.AppointmentDto;
+import java.time.LocalTime;
 
 @Transactional
-public class AppointmentService {
+//capa de servicio que interactua con la capa de persistencia (repositorios JPA)
+public interface AppointmentService {
 
-    //utilizo el repository que implementa a Panache y me proporciona los metodos 
-    @Inject
-    AppointmentRepository appointmentRepository;
+    public List<Appointment> getAllAppointments();
 
-    public List<Appointment> getAllAppointments() {
-        return appointmentRepository.listAll();
-    }
+    public Appointment getAppointmentById(UUID id);
 
-    public Appointment getAppointmentById(UUID id) {
-        return appointmentRepository.findById(id);
-    }
+    public void createAppointment(AppointmentDto appointmentDto) throws Exception;
+
+    public void deleteAppointment(UUID idUser, LocalTime consultingDate);
+
 }
 

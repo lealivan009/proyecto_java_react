@@ -1,7 +1,6 @@
 package services.impl;
 
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -60,9 +59,9 @@ public class MedicalServiceImp implements MedicalService {
         // habilita/desabilita, modifica el horario segun el dia
         schedule.setConsultingEnable(scheduleDto.consultingEnable());
         if(scheduleDto.startTime() != null) 
-            schedule.setStartTime(LocalTime.of(scheduleDto.startTime()[0], scheduleDto.startTime()[1]));
+            schedule.setStartTime(scheduleDto.startTime());
         if(scheduleDto.endTime() != null ) 
-            schedule.setEndTime(LocalTime.of(scheduleDto.endTime()[0], scheduleDto.endTime()[1]));
+            schedule.setEndTime(scheduleDto.endTime());
         //remueve el horario viejo y asigna el horario nuevo
         medical.getConsultingDates().removeIf(s -> s.getNameDay().equals(scheduleDto.nameDay()));
         medical.getConsultingDates().add(schedule);
@@ -70,15 +69,12 @@ public class MedicalServiceImp implements MedicalService {
 
     private List<Schedules> loadSchedules(MedicalDtoRegister medicalDto) {
         List<Schedules> scheduleslist = new ArrayList<>(5);
-        // startTime, endTime son arreglos int[hora,minuto]
-        var startTime = LocalTime.of(medicalDto.startTime()[0], medicalDto.startTime()[1]);
-        var endTime = LocalTime.of(medicalDto.endTime()[0], medicalDto.endTime()[1]);
 
+        // carga el mismo horario de lunes a viernes
         for (var day : DayOfWeek.values()) {
-            // carga el mismo horario de lunes a viernes
             if (!day.equals(DayOfWeek.SUNDAY) && !day.equals(DayOfWeek.SATURDAY)) {
                 scheduleslist.add(
-                        new Schedules(day, startTime, endTime, true));
+                    new Schedules(day,medicalDto.startTime(), medicalDto.endTime(), true));
             }
         }
         return scheduleslist;

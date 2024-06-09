@@ -1,5 +1,6 @@
 package models;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,17 +14,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalTime;
 
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Builder
 @Table(name="appointments")
-public class Appointment extends BaseEntity {
+public class Appointment extends PanacheEntity {
 
     @Column(name = "patient_name")
     private String patientName;
     @Column(name = "consulting_reason")
     private String consultingReason;
+
+    @Column(name="consulting_date")
+    private LocalTime consultingDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "medical_specialist_id")

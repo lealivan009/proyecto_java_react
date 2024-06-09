@@ -1,22 +1,24 @@
 package services.impl;
 
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
+import dto.response.ParcialSpecialistDto;
+import dto.response.SpecialistSchedulesDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Validator;
 import mapper.MedicalMapper;
+import mapper.SchedulesMapper;
 import models.Medical;
 import models.Schedules;
 import repositories.MedicalRepository;
 import services.MedicalService;
+import validator.Validator;
 
 @ApplicationScoped
 public class MedicalServiceImp implements MedicalService {
@@ -38,7 +40,7 @@ public class MedicalServiceImp implements MedicalService {
     @Override
     public void registerAndSave(MedicalDtoRegister medicalDtoRegister) throws Exception {
         //valido campos de medico
-        validateMedical(medicalDtoRegister);
+        validator.validate(medicalDtoRegister);
         // Convierte el DTO a un objeto Medical
         Medical medicalPersist = MedicalMapper.dtoToMedical(medicalDtoRegister);
 
@@ -60,9 +62,9 @@ public class MedicalServiceImp implements MedicalService {
         // habilita/desabilita, modifica el horario segun el dia
         schedule.setConsultingEnable(scheduleDto.consultingEnable());
         if(scheduleDto.startTime() != null) 
-            schedule.setStartTime(LocalTime.of(scheduleDto.startTime()[0], scheduleDto.startTime()[1]));
+            schedule.setStartTime(scheduleDto.startTime());
         if(scheduleDto.endTime() != null ) 
-            schedule.setEndTime(LocalTime.of(scheduleDto.endTime()[0], scheduleDto.endTime()[1]));
+            schedule.setEndTime(scheduleDto.endTime());
         //remueve el horario viejo y asigna el horario nuevo
         medical.getConsultingDates().removeIf(s -> s.getNameDay().equals(scheduleDto.nameDay()));
         medical.getConsultingDates().add(schedule);
@@ -70,15 +72,12 @@ public class MedicalServiceImp implements MedicalService {
 
     private List<Schedules> loadSchedules(MedicalDtoRegister medicalDto) {
         List<Schedules> scheduleslist = new ArrayList<>(5);
-        // startTime, endTime son arreglos int[hora,minuto]
-        var startTime = LocalTime.of(medicalDto.startTime()[0], medicalDto.startTime()[1]);
-        var endTime = LocalTime.of(medicalDto.endTime()[0], medicalDto.endTime()[1]);
 
+        // carga el mismo horario de lunes a viernes
         for (var day : DayOfWeek.values()) {
-            // carga el mismo horario de lunes a viernes
             if (!day.equals(DayOfWeek.SUNDAY) && !day.equals(DayOfWeek.SATURDAY)) {
                 scheduleslist.add(
-                        new Schedules(day, startTime, endTime, true));
+                    new Schedules(day,medicalDto.startTime(), medicalDto.endTime(), true));
             }
         }
         return scheduleslist;
@@ -106,15 +105,30 @@ public class MedicalServiceImp implements MedicalService {
         return medicalRepo.listAll();
     }
 
-    private void validateMedical(Object objMedical) throws Exception {
-        var contrains = validator.validate(objMedical);
-        if (!contrains.isEmpty()) {
-            StringBuilder errorsMessage = new StringBuilder();
-            contrains.stream()
-                    .forEach(c -> errorsMessage.append(c.getMessageTemplate()).append(", "));
-            throw new Exception(errorsMessage.toString());
-        }
+    //crea dtos de medico y horarios disponibles
+    @Override
+    public List<SpecialistSchedulesDto> getAllSpeciality() {
+        List<SpecialistSchedulesDto> specialists = new ArrayList<>();
+        var medicals = findAll() ; 
 
+        medicals.stream().forEach(
+            medical -> {
+                //dto intermedio de specialist
+                ParcialSpecialistDto medicalDto =  MedicalMapper.entityToDto(medical);
+                specialists.add(
+                    //dto completo medico con horario disponible
+                    new SpecialistSchedulesDto(
+                        medicalDto.fullname(), 
+                        medicalDto.specialityType(),
+                        medicalDto.consultingDates().stream()
+                            .filter(s -> s.isConsultingEnable())
+                            .map(s -> SchedulesMapper.entityToDto(s)).toList(),
+                        medicalDto.consultingPlace()
+                    )
+                );
+            }
+        );
+        return specialists;
     }
 
 }

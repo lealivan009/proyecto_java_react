@@ -7,6 +7,8 @@ Desarrollar una API RESTful utilizando Java para manejar las siguientes funciona
 - Implementar validaciones de datos para garantizar la integridad de la información ingresada por los usuarios.
 - Utilizar Java Persistence API (JPA) para la interacción con la base de datos relacional.
 
+#### Documentacion del proyecto : [backend/README.md](https://github.com/lealivan009/proyecto_java_react/blob/main/backend/README.md)
+
 ## 📲 Frontend:
 Diseñar una interfaz de usuario intuitiva y amigable utilizando React para permitir a los usuarios:
 - Solicitar turnos médicos, seleccionando el especialista, la fecha y la hora deseada.

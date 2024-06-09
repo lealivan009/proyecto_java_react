@@ -1,6 +1,10 @@
 package models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,4 +32,14 @@ public class User extends BaseEntity {
     @Temporal(TemporalType.DATE)
     @Column(name ="bith_date")
     private LocalDate birthDate;
+
+    @Column(name = "is_enable")
+    private boolean isEnable;
+    
+    @CreationTimestamp
+    @Column(name = "create_user")
+    private LocalDateTime createdUser;
+    @UpdateTimestamp
+    @Column(name = "update_user")
+    private LocalDateTime updateUser;
 }

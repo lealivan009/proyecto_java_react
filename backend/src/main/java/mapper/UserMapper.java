@@ -1,7 +1,7 @@
 package mapper;
 
 import dto.request.UserDtoRegister;
-import dto.response.FullUserDto;
+import dto.response.UserDto;
 import models.User;
 
 public class UserMapper {
@@ -17,8 +17,8 @@ public class UserMapper {
                 .build();
     }
 
-    public static FullUserDto userToDto(User entity) {
-        return new FullUserDto(
+    public static UserDto userToDto(User entity) {
+        return new UserDto(
             entity.getId(),
             entity.getEmail(), 
             entity.getPassword(), 

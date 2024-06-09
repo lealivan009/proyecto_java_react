@@ -1,9 +1,11 @@
 package services;
 
+import java.util.List;
 import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
+import dto.response.SpecialistSchedulesDto;
 import models.Medical;
 
 public interface MedicalService {
@@ -28,4 +30,6 @@ public interface MedicalService {
     public Object findAll();
 
     public void modifySchedules(UUID id, SchedulesDtoUpdate shceduleDto) throws Exception;
+
+    public List<SpecialistSchedulesDto> getAllSpeciality();
 }

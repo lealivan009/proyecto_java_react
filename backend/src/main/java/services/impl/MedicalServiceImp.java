@@ -7,10 +7,13 @@ import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
+import dto.response.ParcialSpecialistDto;
+import dto.response.SpecialistSchedulesDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import mapper.MedicalMapper;
+import mapper.SchedulesMapper;
 import models.Medical;
 import models.Schedules;
 import repositories.MedicalRepository;
@@ -100,6 +103,32 @@ public class MedicalServiceImp implements MedicalService {
      */
     public List<Medical> findAll() {
         return medicalRepo.listAll();
+    }
+
+    //crea dtos de medico y horarios disponibles
+    @Override
+    public List<SpecialistSchedulesDto> getAllSpeciality() {
+        List<SpecialistSchedulesDto> specialists = new ArrayList<>();
+        var medicals = findAll() ; 
+
+        medicals.stream().forEach(
+            medical -> {
+                //dto intermedio de specialist
+                ParcialSpecialistDto medicalDto =  MedicalMapper.entityToDto(medical);
+                specialists.add(
+                    //dto completo medico con horario disponible
+                    new SpecialistSchedulesDto(
+                        medicalDto.fullname(), 
+                        medicalDto.specialityType(),
+                        medicalDto.consultingDates().stream()
+                            .filter(s -> s.isConsultingEnable())
+                            .map(s -> SchedulesMapper.entityToDto(s)).toList(),
+                        medicalDto.consultingPlace()
+                    )
+                );
+            }
+        );
+        return specialists;
     }
 
 }

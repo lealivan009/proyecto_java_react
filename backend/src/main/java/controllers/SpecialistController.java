@@ -7,7 +7,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import services.impl.SpecialistServiceImp;
+import services.MedicalService;
 
 @Path("/specialists")
 @Produces(MediaType.APPLICATION_JSON)
@@ -16,10 +16,10 @@ import services.impl.SpecialistServiceImp;
 public class SpecialistController{
 
     @Inject
-    private SpecialistServiceImp specialistServiceImp;
+    private MedicalService medicalService;
 
     @GET
     public Response getAllSpecialists(){
-        return Response.ok(specialistServiceImp.getAllSpecialists()).build();
+        return Response.ok(medicalService.getAllSpeciality()).build();
     }
 }

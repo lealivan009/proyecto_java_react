@@ -58,3 +58,64 @@ If you want to learn more about building native executables, please consult http
 Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+# Java structure
+├───main
+│   ├───docker
+│   ├───java
+│   │   ├───controllers
+│   │   ├───dto
+│   │   │   ├───request
+│   │   │   └───response
+│   │   ├───Exception
+│   │   │   └───handler
+│   │   ├───mapper
+│   │   ├───models
+│   │   │   └───enumerations
+│   │   ├───repositories
+│   │   ├───services
+│   │   │   └───impl
+│   │   └───validator
+│   └───resources
+└───test
+    └───java
+        └───org
+            └───acme
+
+# Endpoints
+Appointment Controller
+    Register a new medical
+    /api/medicals/register -> POST
+    
+    Get all medicals
+    /api/medicals -> GET
+
+    Get one medical
+    /api/medicals/{id} -> GET
+
+    Update a medical
+    /api/medicals/{id}/schedules -> PUT
+
+Specialist Controller
+    Get all specialists
+    /api/specialists -> GET
+
+User Controller
+    Get all users
+    /api/users -> GET
+
+    Login user
+    /api/users/login -> POST
+
+    Register a new user
+    /api/users/register -> POST
+
+    Get one user
+    /api/users/{id} -> GET
+
+    Update one user
+    /api/users/{id} -> PUT
+
+    Delete one user
+    /api/users/{id} -> DELETE
+

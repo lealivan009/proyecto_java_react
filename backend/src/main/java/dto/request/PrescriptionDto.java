@@ -1,0 +1,11 @@
+package dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record PrescriptionDto(
+    @NotBlank(message = "Patient name is required!") String patientName,
+    @NotBlank(message = "Medication description is required!") String medicamentDesciption,
+    @NotBlank(message = "Treatment steps are required!") String posology,
+    @NotNull(message = "Number of days of treatment required!") int durationTratament
+) { }

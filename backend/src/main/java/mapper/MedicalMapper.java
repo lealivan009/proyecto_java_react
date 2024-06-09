@@ -1,6 +1,7 @@
 package mapper;
 
 import dto.request.MedicalDtoRegister;
+import dto.response.ParcialSpecialistDto;
 import models.Medical;
 import models.enumerations.SpecialityType;
 
@@ -30,5 +31,14 @@ public class MedicalMapper {
                 .matricule(register.matricule()) // Asigna la matrícula del médico
                 .specialityType(specialityType) // Asigna el tipo de especialidad del médico
                 .build();
+    }
+
+    public static ParcialSpecialistDto entityToDto(Medical entity){
+        return new ParcialSpecialistDto(
+            entity.getFullname(),
+            entity.getSpecialityType(),
+            entity.getConsultingDates(),
+            entity.getConsultingPlace()
+        );
     }
 }

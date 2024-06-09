@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
-import io.quarkus.vertx.http.runtime.attribute.ResponseHeaderAttribute;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -19,7 +18,7 @@ import models.Medical;
 import services.MedicalService;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/medical")
+@Path("/medicals")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @PermitAll

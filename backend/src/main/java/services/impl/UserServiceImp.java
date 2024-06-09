@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import Exception.UserException;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
@@ -36,7 +35,7 @@ public class UserServiceImp implements UserService {
         Optional<User> userEntity = userRepo.findByEmail(userRegister.email());
 
         if (userEntity.isPresent())
-            throw new UserException("User with email [" + userRegister.email() + "] is already exist!");
+            throw new Exception("User with email [" + userRegister.email() + "] is already exist!");
 
         User userToPersist = UserMapper.dtoToUser(userRegister);
         userToPersist.setEnable(true);
@@ -62,7 +61,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User findUserById(UUID id) throws Exception {
-        return userRepo.findByIdOptional(id).orElseThrow(() -> new Exception("User not exist with id [ " + id + "]"));
+        return userRepo.findByIdOptional(id).orElseThrow(() -> new Exception("User not exist with id " + id));
     }
 
     @Transactional

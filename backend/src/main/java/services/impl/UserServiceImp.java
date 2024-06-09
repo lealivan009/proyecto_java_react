@@ -53,6 +53,7 @@ public class UserServiceImp implements UserService {
         return UserMapper.userToDto(userEntity);
     }
 
+    @Override
     public List<FullUserDto> findAll() {
         return userRepo.findAll().project(FullUserDto.class).list();
     }

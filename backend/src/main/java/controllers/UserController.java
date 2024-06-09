@@ -49,6 +49,13 @@ public class UserController {
         return Response.ok(userService.findUserById(id)).build();
     }
 
+    @DELETE
+    @Path("/{id}")
+    public Response deleteUser(@PathParam("id") UUID id) throws Exception{
+        userService.deleteUser(id);
+        return Response.noContent().build();
+    }
+
     @GET
     public Response getAllUsers(){
         return Response.ok(userService.findAll()).build();

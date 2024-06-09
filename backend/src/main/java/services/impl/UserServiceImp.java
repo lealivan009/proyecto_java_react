@@ -9,6 +9,7 @@ import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
 import dto.response.FullUserDto;
+import dto.response.UserDto;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -38,23 +39,25 @@ public class UserServiceImp implements UserService {
             throw new UserException("User with email [" + userRegister.email() + "] is already exist!");
 
         User userToPersist = UserMapper.dtoToUser(userRegister);
+        userToPersist.setEnable(true);
         userToPersist.setPassword(BcryptUtil.bcryptHash(userToPersist.getPassword()));
         userRepo.persist(userToPersist);
     }
     
     @Override
-    public FullUserDto loginUser(UserDtoLogin userLogin) throws Exception {
+    public UserDto loginUser(UserDtoLogin userLogin) throws Exception {
         validateUser(userLogin);
 
-        User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("email o contraseña incorrectos"));
+        User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("Incorrect email or passwords"));
         if(!BcryptUtil.matches(userLogin.password(), userEntity.getPassword()))
-            throw new Exception("email o contraseña incorrectos");
+            throw new Exception("Incorrect email or passwords");
 
         return UserMapper.userToDto(userEntity);
     }
 
+    @Override
     public List<FullUserDto> findAll() {
-        return userRepo.findAll().project(FullUserDto.class).list();
+        return userRepo.findAllFullUserDto();
     }
 
     @Override
@@ -83,6 +86,13 @@ public class UserServiceImp implements UserService {
             validateUser(userUpdate);
             userEntity.setPassword(BcryptUtil.bcryptHash(userUpdate.password()));
         }   
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(UUID id) throws Exception {
+        var userEntity = findUserById(id);
+        userRepo.softDelete(userEntity);
     }
 
     // valida los campos del usuario, lanza una Exception con los campos incorrectos

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
+import dto.request.SchedulesDtoUpdate;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -46,6 +47,25 @@ public class MedicalServiceImp implements MedicalService {
 
         // Persiste el médico en la base de datos
         medicalRepo.persist(medicalPersist);
+    }
+
+    @Transactional
+    public void modifySchedules(UUID id, SchedulesDtoUpdate scheduleDto) throws Exception{
+        Medical medical = getMedicalById(id);
+
+        Schedules schedule = medical.getConsultingDates().stream()
+            .filter(s -> s.getNameDay().equals(scheduleDto.nameDay()))
+            .findFirst().orElseThrow(()-> new Exception("The schedule is not listed"));
+    
+        // habilita/desabilita, modifica el horario segun el dia
+        schedule.setConsultingEnable(scheduleDto.consultingEnable());
+        if(scheduleDto.startTime() != null) 
+            schedule.setStartTime(LocalTime.of(scheduleDto.startTime()[0], scheduleDto.startTime()[1]));
+        if(scheduleDto.endTime() != null ) 
+            schedule.setEndTime(LocalTime.of(scheduleDto.endTime()[0], scheduleDto.endTime()[1]));
+        //remueve el horario viejo y asigna el horario nuevo
+        medical.getConsultingDates().removeIf(s -> s.getNameDay().equals(scheduleDto.nameDay()));
+        medical.getConsultingDates().add(schedule);
     }
 
     private List<Schedules> loadSchedules(MedicalDtoRegister medicalDto) {

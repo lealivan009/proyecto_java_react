@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import dto.request.AppointmentDto;
+import dto.request.NewAppointmentDto;
 
 @ApplicationScoped
 //capa de servicio que interactua con la capa de persistencia (repositorios JPA)
@@ -93,5 +94,56 @@ public class AppointmentServiceImp implements AppointmentService{
             //Metodo que me da Panache en el repository para eliminar el turno en la bd
             appointmentRepository.delete(appointment);
         }
+    }
+
+    public void updateAppointment(UUID idAppointment, NewAppointmentDto newAppointmentDto) throws Exception{
+        //Obtener el turno médico a actualizar
+        Appointment appointment = appointmentRepository.findById(idAppointment);
+        
+        // Verificar si el turno médico existe
+        if (appointment == null) {
+            throw new RuntimeException("El turno médico con ID " + idAppointment + " no existe");
+        }
+        
+        // Verificar si hay cambios en la fecha y hora de la cita
+        if (newAppointmentDto.consultingDate() != null) {
+            // Verificar si la nueva fecha y hora de la cita están dentro de los horarios de consulta del médico
+            Medical medical = appointment.getMedicalSpecialist();
+            List<Schedules> consultingDates = medical.getConsultingDates();
+            LocalTime updatedConsultingDate = newAppointmentDto.consultingDate();
+
+            boolean disponible = false;
+            for (Schedules schedule : consultingDates) {
+                LocalTime startTime = schedule.getStartTime();
+                LocalTime endTime = schedule.getEndTime();
+                if (updatedConsultingDate.isAfter(startTime) && updatedConsultingDate.isBefore(endTime)) {
+                    disponible = true;
+                    break;
+                }
+            }
+            if (!disponible) {
+                throw new RuntimeException("El horario del turno está fuera de los horarios de consulta del médico");
+            } else{
+                // Actualizar la fecha y hora de la cita
+                appointment.setConsultingDate(newAppointmentDto.consultingDate());
+            }
+        }
+
+        // Verificar si hay cambios en el ID del médico especialista
+        if (newAppointmentDto.medicalId() != null) {
+
+            Medical medical = medicalService.getMedicalById(newAppointmentDto.medicalId());
+            // Asignar el nuevo médico especialista al turno médico
+            appointment.setMedicalSpecialist(medical);
+        }
+
+        // Verificar si hay cambios en el motivo de la consulta
+        if (newAppointmentDto.consultingReason() != null) {
+            // Actualizar el motivo de la consulta
+            appointment.setConsultingReason(newAppointmentDto.consultingReason());
+        }
+
+        //metodo que me da Panache en el repository para persistir en la bd
+        appointmentRepository.persist(appointment);
     }
 }

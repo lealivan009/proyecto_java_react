@@ -3,13 +3,18 @@ package services.impl;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import models.enumerations.SpecialityType;
+import jakarta.inject.Inject;
+import models.Medical;
+import repositories.MedicalRepository;
 import services.SpecialistService;
 
 @ApplicationScoped
 public class SpecialistServiceImp implements SpecialistService {
+    @Inject
+    private MedicalRepository medicalRepository;
+
     @Override
-    public List<SpecialityType> getAllSpecialists() {
-        return List.of(SpecialityType.values());
+    public List<Medical> getAllSpecialists() {
+        return medicalRepository.listAll(); 
     }
 }

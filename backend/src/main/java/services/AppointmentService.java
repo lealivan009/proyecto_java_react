@@ -5,6 +5,8 @@ import java.util.List;
 import models.Appointment;
 import java.util.UUID;
 import dto.request.AppointmentDto;
+import dto.request.NewAppointmentDto;
+
 import java.time.LocalTime;
 
 @Transactional
@@ -18,6 +20,8 @@ public interface AppointmentService {
     public void createAppointment(AppointmentDto appointmentDto) throws Exception;
 
     public void deleteAppointment(UUID idUser, LocalTime consultingDate);
+
+    public void updateAppointment(UUID idAppointment, NewAppointmentDto newAppointmentDto) throws Exception;
 
 }
 

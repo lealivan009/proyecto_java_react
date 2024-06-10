@@ -3,7 +3,7 @@ package dto.response;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record UserDto(
+public record UserDtoResponse(
     UUID id,
     String email,
     String password,
@@ -12,4 +12,4 @@ public record UserDto(
     String lastname,
     String dni,
     LocalDate birthName
-){}
+) {}

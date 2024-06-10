@@ -10,4 +10,4 @@ public record ParcialSpecialistDto(
     SpecialityType specialityType,
     List<Schedules> consultingDates,
     String consultingPlace
-) { }
+) {}

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 //Solo lo uso para recuperarlo de la base de datos y ver toda la info
-public record FullUserDto(
+public record FullUserDtoResponse(
     UUID id,
     String email,
     String password,

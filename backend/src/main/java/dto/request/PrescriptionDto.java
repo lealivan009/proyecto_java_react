@@ -11,4 +11,4 @@ public record PrescriptionDto(
     @NotNull(message = "Number of days of treatment required!") 
     @Min(value = 1, message = "Value minimus is 1 day") 
     int durationTratament
-) { }
+) {}

@@ -16,5 +16,4 @@ public record UserDtoUpdate(
     String dni,
     String photo,
     LocalDate birthDate
-    ) {
-}
+) {}

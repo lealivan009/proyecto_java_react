@@ -7,4 +7,4 @@ public record SchedulesDtoResponse(
     DayOfWeek nameDay,
     LocalTime startTime,
     LocalTime endTime
-) { }
+) {}

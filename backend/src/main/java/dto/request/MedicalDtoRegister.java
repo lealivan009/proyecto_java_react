@@ -13,5 +13,4 @@ public record MedicalDtoRegister(
     @NotBlank(message = "Medical Speciality is needed!") String medicalSpeciality,
     @NotNull(message = "Cosulting dates is needed!") LocalTime startTime,
     @NotNull(message = "Cosulting dates is needed!") LocalTime endTime
-    )
-{}
+) {}

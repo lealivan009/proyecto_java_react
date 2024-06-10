@@ -14,6 +14,7 @@ import models.Schedules;
 import repositories.AppointmentRepository;
 import services.MedicalService;
 import services.UserService;
+import validator.Validator;
 import services.AppointmentService;
 
 import java.time.LocalDateTime;
@@ -33,8 +34,12 @@ public class AppointmentServiceImp implements AppointmentService{
 
     @Inject
     UserService userService;
+
     @Inject
     MedicalService medicalService; 
+
+    @Inject
+    Validator validator;
 
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.listAll();
@@ -46,6 +51,8 @@ public class AppointmentServiceImp implements AppointmentService{
 
     @Transactional
     public void createAppointment(AppointmentDto appointmentDto) throws Exception{
+        //valido que los campos de appointment no vengan vacios
+        validator.validate(appointmentDto);
         //busco que el usuario coincida con el usuario del turno y sino coincide ya larga la excepcion en el service
         userService.findUserById(appointmentDto.userId());
         Medical medical = medicalService.getMedicalById(appointmentDto.medicalId()); //idem

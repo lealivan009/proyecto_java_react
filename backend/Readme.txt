@@ -1,1 +1,0 @@
-Proyecto Java creado con Quarkus

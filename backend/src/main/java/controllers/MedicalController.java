@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
-import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -21,7 +20,6 @@ import jakarta.ws.rs.core.MediaType;
 @Path("/medicals")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@PermitAll
 public class MedicalController {
     
     @Inject
@@ -30,7 +28,7 @@ public class MedicalController {
     // Método POST para registrar un nuevo usuario médico
     @POST
     @Path("/register")
-    public Response registerMedicalUser(MedicalDtoRegister medicalRegister) throws Exception {
+    public Response registerMedical(MedicalDtoRegister medicalRegister) throws Exception {
         // Llama al servicio para registrar y guardar un nuevo usuario médico
         medicalService.registerAndSave(medicalRegister);
         // Devuelve una respuesta con el estado 201 (CREATED) si la operación es exitosa
@@ -49,7 +47,7 @@ public class MedicalController {
 
     // Método GET para obtener todos los usuarios médicos (actualmente solo imprime un mensaje)
     @GET
-    public Response getAllUsers(){
+    public Response getAllMedical(){
         // Devuelve una respuesta con el estado 200 (OK)
         return Response.ok(medicalService.findAll()).build();
     }

@@ -8,7 +8,7 @@ import java.util.UUID;
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
 import dto.response.ParcialSpecialistDto;
-import dto.response.SpecialistSchedulesDto;
+import dto.response.SpecialistSchedulesDtoResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -107,8 +107,8 @@ public class MedicalServiceImp implements MedicalService {
 
     //crea dtos de medico y horarios disponibles
     @Override
-    public List<SpecialistSchedulesDto> getAllSpeciality() {
-        List<SpecialistSchedulesDto> specialists = new ArrayList<>();
+    public List<SpecialistSchedulesDtoResponse> getAllSpeciality() {
+        List<SpecialistSchedulesDtoResponse> specialists = new ArrayList<>();
         var medicals = findAll() ; 
 
         medicals.stream().forEach(
@@ -117,7 +117,7 @@ public class MedicalServiceImp implements MedicalService {
                 ParcialSpecialistDto medicalDto =  MedicalMapper.entityToDto(medical);
                 specialists.add(
                     //dto completo medico con horario disponible
-                    new SpecialistSchedulesDto(
+                    new SpecialistSchedulesDtoResponse(
                         medicalDto.fullname(), 
                         medicalDto.specialityType(),
                         medicalDto.consultingDates().stream()

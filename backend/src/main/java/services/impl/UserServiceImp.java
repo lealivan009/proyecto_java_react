@@ -7,8 +7,8 @@ import java.util.UUID;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
-import dto.response.FullUserDto;
-import dto.response.UserDto;
+import dto.response.FullUserDtoResponse;
+import dto.response.UserDtoResponse;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -44,7 +44,7 @@ public class UserServiceImp implements UserService {
     }
     
     @Override
-    public UserDto loginUser(UserDtoLogin userLogin) throws Exception {
+    public UserDtoResponse loginUser(UserDtoLogin userLogin) throws Exception {
         validator.validate(userLogin);
 
         User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("Incorrect email or passwords"));
@@ -55,7 +55,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<FullUserDto> findAll() {
+    public List<FullUserDtoResponse> findAll() {
         return userRepo.findAllFullUserDto();
     }
 

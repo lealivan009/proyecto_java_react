@@ -8,4 +8,4 @@ public record PrescriptionDtoResponse(
     String posology,
     int durationTratament,
     LocalDate emissionDate
-) { }
+) {}

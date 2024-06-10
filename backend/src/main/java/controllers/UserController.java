@@ -8,7 +8,6 @@ import java.util.UUID;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
-import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -17,7 +16,6 @@ import jakarta.ws.rs.core.Response;
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@PermitAll
 public class UserController {
 
     @Inject
@@ -57,7 +55,7 @@ public class UserController {
     }
 
     @GET
-    public Response getAllUsers(){
+    public Response getAllUser(){
         return Response.ok(userService.findAll()).build();
     }
 }

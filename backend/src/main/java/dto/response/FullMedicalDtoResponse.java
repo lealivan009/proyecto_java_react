@@ -2,11 +2,10 @@ package dto.response;
 
 import java.util.UUID;
 
-public record FullMedicalUserDTO(
+public record FullMedicalDtoResponse(
         UUID id,
         String fullname,
         String matricule,
         String consultingPlace,
-        String specialityType) {
-
-}
+        String specialityType
+) {}

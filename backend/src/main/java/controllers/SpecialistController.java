@@ -12,7 +12,6 @@ import services.MedicalService;
 @Path("/specialists")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
 public class SpecialistController{
 
     @Inject

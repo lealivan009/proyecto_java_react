@@ -130,6 +130,25 @@ http://localhost:8080/q/swagger-ui
     Get a prescription 
     /api/prescriptions/{prescriptionId}
 
+
+### Appointment Controller
+![This is an alt text.](./images/appointment.webp "This is a sample image.")
+
+    Get all appointments
+    /api/appointments -> GET
+    
+    Post a new appointments
+    /api/appointments -> POST
+
+     Get one appointments
+    /api/appointments/{id} -> GET
+
+    Update one appointment
+    /api/appointment/{id} -> PUT
+
+    Delete a appointment
+    /api/appointments/{id} -> DELETE
+    
 ### Puntos a mejorar
 
  - Test en la aplicacion

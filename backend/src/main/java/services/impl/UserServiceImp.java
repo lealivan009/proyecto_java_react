@@ -12,6 +12,7 @@ import dto.response.UserDtoResponse;
 import exceptions.EmailAlredyExistException;
 import exceptions.EntityNotFoundException;
 import exceptions.IncorrectUsernameOrPasswordExpection;
+import exceptions.PasswordNotCoincidentException;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -34,9 +35,12 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void registerAndSave(UserDtoRegister userRegister) throws Exception {
+        //valida campos de entrada obligatorios y que las contraseñas coincidan
         validator.validate(userRegister);
-        Optional<User> userEntity = userRepo.findByEmail(userRegister.email());
+        if(!userRegister.password().equals(userRegister.repeatPassword()))
+            throw new PasswordNotCoincidentException();
 
+        Optional<User> userEntity = userRepo.findByEmail(userRegister.email());
         if (userEntity.isPresent())
             throw new EmailAlredyExistException("User with email [" + userRegister.email() + "] is already exist!");
 

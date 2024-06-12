@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 import exceptions.ErrorDtoResponse;
 import exceptions.IncorrectUsernameOrPasswordExpection;
+import exceptions.PasswordNotCoincidentException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -20,6 +21,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         if(e instanceof EntityNotFoundException) return entityNotFoundException(e);
         if(e instanceof EmailAlredyExistException) return emailAlredyExistException(e);
         if(e instanceof IncorrectUsernameOrPasswordExpection) return incorrectUsernameOrPasswordException(e);
+        if(e instanceof PasswordNotCoincidentException) return passwordNotCoincidentException(e);
         //Exception personalizada
 
         return errorServerException(e);
@@ -33,6 +35,9 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         return createRespone(Response.Status.CONFLICT, e.getMessage());
     }
     private Response incorrectUsernameOrPasswordException(Exception e){
+        return createRespone(Response.Status.NOT_FOUND, e.getMessage());
+    }
+    private Response passwordNotCoincidentException(Exception e){
         return createRespone(Response.Status.NOT_FOUND, e.getMessage());
     }
 

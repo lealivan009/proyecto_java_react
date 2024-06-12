@@ -9,6 +9,7 @@ import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
 import dto.response.FullUserDtoResponse;
 import dto.response.UserDtoResponse;
+import exceptions.EntityNotFoundException;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -61,7 +62,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User findUserById(UUID id) throws Exception {
-        return userRepo.findByIdOptional(id).orElseThrow(() -> new Exception("User not exist with id " + id));
+        return userRepo.findByIdOptional(id).orElseThrow(() -> new EntityNotFoundException("User not exist with id " + id));
     }
 
     @Transactional

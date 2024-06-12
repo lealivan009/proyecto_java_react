@@ -7,8 +7,7 @@ import java.util.UUID;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
-import dto.response.FullUserDtoResponse;
-import dto.response.UserDtoResponse;
+import dto.response.PublicUserDtoResponse;
 import exceptions.EmailAlredyExistException;
 import exceptions.EntityNotFoundException;
 import exceptions.IncorrectUsernameOrPasswordExpection;
@@ -51,7 +50,7 @@ public class UserServiceImp implements UserService {
     }
     
     @Override
-    public UserDtoResponse loginUser(UserDtoLogin userLogin) throws Exception {
+    public PublicUserDtoResponse loginUser(UserDtoLogin userLogin) throws Exception {
         validator.validate(userLogin);
 
         User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new IncorrectUsernameOrPasswordExpection());
@@ -62,8 +61,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<FullUserDtoResponse> findAll() {
-        return userRepo.findAllFullUserDto();
+    public List<PublicUserDtoResponse> findAll() {
+        return userRepo.findAllPublicUserDto();
     }
 
     @Override

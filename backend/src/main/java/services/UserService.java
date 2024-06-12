@@ -8,14 +8,13 @@ import java.util.UUID;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
-import dto.response.FullUserDtoResponse;
-import dto.response.UserDtoResponse;
+import dto.response.PublicUserDtoResponse;
 
 public interface UserService {
     public void registerAndSave(UserDtoRegister userRegister) throws Exception;
-    public UserDtoResponse loginUser(UserDtoLogin UserLogin) throws Exception;
+    public PublicUserDtoResponse loginUser(UserDtoLogin UserLogin) throws Exception;
     public User findUserById(UUID id) throws Exception; 
     public void updateUser(UUID id, UserDtoUpdate userUpdate) throws Exception;
-    public List<FullUserDtoResponse> findAll();
+    public List<PublicUserDtoResponse> findAll();
     public void deleteUser(UUID id) throws Exception;
 }

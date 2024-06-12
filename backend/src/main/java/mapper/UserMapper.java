@@ -1,7 +1,7 @@
 package mapper;
 
 import dto.request.UserDtoRegister;
-import dto.response.UserDtoResponse;
+import dto.response.PublicUserDtoResponse;
 import models.User;
 
 public class UserMapper {
@@ -17,11 +17,10 @@ public class UserMapper {
                 .build();
     }
 
-    public static UserDtoResponse userToDto(User entity) {
-        return new UserDtoResponse(
+    public static PublicUserDtoResponse userToDto(User entity) {
+        return new PublicUserDtoResponse(
             entity.getId(),
             entity.getEmail(), 
-            entity.getPassword(), 
             entity.getPhoto(),
             entity.getName(), 
             entity.getLastname(), 

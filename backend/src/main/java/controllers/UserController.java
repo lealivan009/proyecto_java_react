@@ -12,6 +12,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import mapper.UserMapper;
 
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
@@ -44,7 +45,7 @@ public class UserController {
     @GET
     @Path("/{id}")
     public Response getUserById(@PathParam("id") UUID id) throws Exception {
-        return Response.ok(userService.findUserById(id)).build();
+        return Response.ok(UserMapper.userToDto(userService.findUserById(id))).build();
     }
 
     @DELETE

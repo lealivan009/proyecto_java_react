@@ -6,6 +6,7 @@ import exceptions.EntityNotFoundException;
 import java.time.LocalDateTime;
 
 import exceptions.ErrorDtoResponse;
+import exceptions.IncorrectUsernameOrPasswordExpection;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -18,6 +19,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
     public  Response toResponse(Exception e) { 
         if(e instanceof EntityNotFoundException) return entityNotFoundException(e);
         if(e instanceof EmailAlredyExistException) return emailAlredyExistException(e);
+        if(e instanceof IncorrectUsernameOrPasswordExpection) return incorrectUsernameOrPasswordException(e);
         //Exception personalizada
 
         return errorServerException(e);
@@ -29,6 +31,9 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
 
     private Response emailAlredyExistException(Exception e){
         return createRespone(Response.Status.CONFLICT, e.getMessage());
+    }
+    private Response incorrectUsernameOrPasswordException(Exception e){
+        return createRespone(Response.Status.NOT_FOUND, e.getMessage());
     }
 
     private Response errorServerException(Exception e){

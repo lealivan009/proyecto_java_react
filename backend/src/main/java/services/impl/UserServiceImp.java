@@ -11,6 +11,7 @@ import dto.response.FullUserDtoResponse;
 import dto.response.UserDtoResponse;
 import exceptions.EmailAlredyExistException;
 import exceptions.EntityNotFoundException;
+import exceptions.IncorrectUsernameOrPasswordExpection;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -49,9 +50,9 @@ public class UserServiceImp implements UserService {
     public UserDtoResponse loginUser(UserDtoLogin userLogin) throws Exception {
         validator.validate(userLogin);
 
-        User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("Incorrect email or passwords"));
+        User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new IncorrectUsernameOrPasswordExpection());
         if(!BcryptUtil.matches(userLogin.password(), userEntity.getPassword()))
-            throw new Exception("Incorrect email or passwords");
+            throw new IncorrectUsernameOrPasswordExpection();
 
         return UserMapper.userToDto(userEntity);
     }

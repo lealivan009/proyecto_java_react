@@ -9,6 +9,10 @@ import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
 import dto.response.FullUserDtoResponse;
 import dto.response.UserDtoResponse;
+import exceptions.EmailAlredyExistException;
+import exceptions.EntityNotFoundException;
+import exceptions.IncorrectUsernameOrPasswordExpection;
+import exceptions.PasswordNotCoincidentException;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -31,11 +35,14 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void registerAndSave(UserDtoRegister userRegister) throws Exception {
+        //valida campos de entrada obligatorios y que las contraseñas coincidan
         validator.validate(userRegister);
-        Optional<User> userEntity = userRepo.findByEmail(userRegister.email());
+        if(!userRegister.password().equals(userRegister.repeatPassword()))
+            throw new PasswordNotCoincidentException();
 
+        Optional<User> userEntity = userRepo.findByEmail(userRegister.email());
         if (userEntity.isPresent())
-            throw new Exception("User with email [" + userRegister.email() + "] is already exist!");
+            throw new EmailAlredyExistException("User with email [" + userRegister.email() + "] is already exist!");
 
         User userToPersist = UserMapper.dtoToUser(userRegister);
         userToPersist.setEnable(true);
@@ -47,9 +54,9 @@ public class UserServiceImp implements UserService {
     public UserDtoResponse loginUser(UserDtoLogin userLogin) throws Exception {
         validator.validate(userLogin);
 
-        User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new Exception("Incorrect email or passwords"));
+        User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new IncorrectUsernameOrPasswordExpection());
         if(!BcryptUtil.matches(userLogin.password(), userEntity.getPassword()))
-            throw new Exception("Incorrect email or passwords");
+            throw new IncorrectUsernameOrPasswordExpection();
 
         return UserMapper.userToDto(userEntity);
     }
@@ -61,7 +68,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User findUserById(UUID id) throws Exception {
-        return userRepo.findByIdOptional(id).orElseThrow(() -> new Exception("User not exist with id " + id));
+        return userRepo.findByIdOptional(id).orElseThrow(() -> new EntityNotFoundException("User not exist with id " + id));
     }
 
     @Transactional

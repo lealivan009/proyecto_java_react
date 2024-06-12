@@ -13,6 +13,7 @@ public record UserDtoRegister(
     @NotBlank(message = "Password is mandatory") 
     @Size(min = 8, message = "Password with minimum 8 characters") 
     String password,
+    String repeatPassword,
     @NotBlank(message = "Name is mandatory")
     String name,
     @NotBlank(message = "Lastname is mandatory")

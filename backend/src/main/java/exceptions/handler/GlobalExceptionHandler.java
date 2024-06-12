@@ -35,16 +35,23 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         return createRespone(Response.Status.CONFLICT, e.getMessage());
     }
     private Response incorrectUsernameOrPasswordException(Exception e){
-        return createRespone(Response.Status.NOT_FOUND, e.getMessage());
+        return createRespone(Response.Status.UNAUTHORIZED, e.getMessage());
     }
     private Response passwordNotCoincidentException(Exception e){
-        return createRespone(Response.Status.NOT_FOUND, e.getMessage());
+        return createRespone(Response.Status.UNAUTHORIZED, e.getMessage());
     }
 
     private Response errorServerException(Exception e){
         return createRespone(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
     }
     
+    /**
+     * Prepara un cuerpo de respuesta con <strong>codigo de estado</strong>, <strong>mensaje</strong> y <strong>tiempo en que ocurrio el error</strong>.
+     * No necesita modificar este metodo, solo uselo para crear su respuesta de error. 
+     * @param status Status code (BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR...etc)
+     * @param message String con mensaje personalizado del error, normalmente ya lo indico cuando creo la Exception. Utilize getMessage()
+     * @return
+     */
     private Response createRespone(Status status, String message){
         return Response
             .status(status)

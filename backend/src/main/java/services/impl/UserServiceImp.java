@@ -9,6 +9,7 @@ import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
 import dto.response.FullUserDtoResponse;
 import dto.response.UserDtoResponse;
+import exceptions.EmailAlredyExistException;
 import exceptions.EntityNotFoundException;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,7 +37,7 @@ public class UserServiceImp implements UserService {
         Optional<User> userEntity = userRepo.findByEmail(userRegister.email());
 
         if (userEntity.isPresent())
-            throw new Exception("User with email [" + userRegister.email() + "] is already exist!");
+            throw new EmailAlredyExistException("User with email [" + userRegister.email() + "] is already exist!");
 
         User userToPersist = UserMapper.dtoToUser(userRegister);
         userToPersist.setEnable(true);

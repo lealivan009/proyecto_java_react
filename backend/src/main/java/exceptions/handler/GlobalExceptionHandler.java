@@ -1,5 +1,6 @@
 package exceptions.handler;
 
+import exceptions.EmailAlredyExistException;
 import exceptions.EntityNotFoundException;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
     @Override
     public  Response toResponse(Exception e) { 
         if(e instanceof EntityNotFoundException) return entityNotFoundException(e);
+        if(e instanceof EmailAlredyExistException) return emailAlredyExistException(e);
         //Exception personalizada
 
         return errorServerException(e);
@@ -23,6 +25,10 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
 
     private Response entityNotFoundException(Exception e){
         return createRespone(Response.Status.NOT_FOUND, e.getMessage());
+    }
+
+    private Response emailAlredyExistException(Exception e){
+        return createRespone(Response.Status.CONFLICT, e.getMessage());
     }
 
     private Response errorServerException(Exception e){

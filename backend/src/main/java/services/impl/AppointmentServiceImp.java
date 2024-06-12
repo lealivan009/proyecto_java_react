@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import dto.request.AppointmentDto;
 import dto.request.NewAppointmentDto;
+import exceptions.EntityNotFoundException;
 
 @ApplicationScoped
 //capa de servicio que interactua con la capa de persistencia (repositorios JPA)
@@ -112,7 +113,7 @@ public class AppointmentServiceImp implements AppointmentService{
         
         // Verificar si el turno médico existe
         if (appointment == null) {
-            throw new RuntimeException("El turno médico con ID " + idAppointment + " no existe");
+            throw new EntityNotFoundException("El turno médico con ID " + idAppointment + " no existe");
         }
         
         // Verificar si hay cambios en la fecha y hora de la cita

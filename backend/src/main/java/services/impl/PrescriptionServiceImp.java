@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import dto.request.PrescriptionDto;
 import dto.response.PrescriptionDtoResponse;
+import exceptions.EntityNotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -43,7 +44,7 @@ public class PrescriptionServiceImp implements PrescriptionService {
     @Override
     public PrescriptionDtoResponse getPrescription(UUID prescriptionId) throws Exception {
         Prescription pres = prescriptionRepo.findByIdOptional(prescriptionId)
-            .orElseThrow(()-> new Exception("Prescription not found with id "+ prescriptionId.toString()));
+            .orElseThrow(()-> new EntityNotFoundException("Prescription not found with id "+ prescriptionId.toString()));
         return PrescriptionMapper.entityToDto(pres);
     }
 

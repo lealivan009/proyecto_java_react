@@ -9,6 +9,7 @@ import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
 import dto.response.ParcialSpecialistDto;
 import dto.response.SpecialistSchedulesDtoResponse;
+import exceptions.EntityNotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -93,7 +94,7 @@ public class MedicalServiceImp implements MedicalService {
     @Override
     public Medical getMedicalById(UUID id) throws Exception {
         return medicalRepo.findByIdOptional(id)
-                .orElseThrow(() -> new Exception("Medical not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Medical not found with id: " + id));
     }
 
     /**

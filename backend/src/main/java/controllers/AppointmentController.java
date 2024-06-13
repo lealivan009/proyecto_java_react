@@ -4,11 +4,7 @@ import services.impl.AppointmentServiceImp;
 
 import java.util.UUID;
 
-import config.annotations.Appointments.CreateAppointment;
-import config.annotations.Appointments.DeleteAppointment;
-import config.annotations.Appointments.GetAllAppointment;
-import config.annotations.Appointments.GetAppointmentById;
-import config.annotations.Appointments.UpdateAppointment;
+import config.annotations.AppointmentSwaggerDocs;
 import dto.request.AppointmentDto;
 import dto.request.NewAppointmentDto;
 import jakarta.inject.Inject;
@@ -26,40 +22,38 @@ public class AppointmentController {
     @Inject
     private AppointmentServiceImp appointmentService;
 
+    @AppointmentSwaggerDocs.GetAppointmentById
     @GET
     @Path("/{id}")
-    @GetAppointmentById
-    //UUID como tipo de dato para id unicos en entidades JPA
     public Response getAppointmentById(@PathParam("id") UUID id) throws Exception {
         return Response.ok(appointmentService.getAppointmentById(id)).build();
     }
 
+    @AppointmentSwaggerDocs.GetAllAppointment
     @GET
-    @GetAllAppointment
     public Response getAllAppointments(){
         return Response.ok(appointmentService.getAllAppointments()).build();
     }
 
+    @AppointmentSwaggerDocs.CreateAppointment
     @POST
-    @CreateAppointment
     public Response createAppointment(AppointmentDto appointmentDto) throws Exception{
         appointmentService.createAppointment(appointmentDto);
         return Response.status(Response.Status.OK).entity("Turno medico creado exitosamente").build();
         //lanzar excepcion si medico/usuario/horario no disponible/encontrado
     }
 
+    @AppointmentSwaggerDocs.DeleteAppointment
     @DELETE
     @Path("/{id}")
-    @DeleteAppointment
-    //UUID como tipo de dato para id unicos en entidades JPA
     public Response deleteAppointment(@PathParam("id") UUID idUser, LocalTime consultingDate) throws Exception {
         appointmentService.deleteAppointment(idUser, consultingDate);
         return Response.status(Response.Status.OK).entity("Turno medico eliminado exitosamente").build();
     }
 
+    @AppointmentSwaggerDocs.UpdateAppointment
     @PUT
     @Path("/{id}")
-    @UpdateAppointment
     public Response updateAppointment(@PathParam("id") UUID idAppointment, NewAppointmentDto newAppointmentDto) throws Exception{
         try {
             appointmentService.updateAppointment(idAppointment, newAppointmentDto);

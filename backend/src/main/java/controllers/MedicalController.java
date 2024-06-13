@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.UUID;
 
+import config.annotations.MedicalSwaggerDocs;
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
 import jakarta.inject.Inject;
@@ -25,7 +26,7 @@ public class MedicalController {
     @Inject
     private MedicalService medicalService;
 
-    // Método POST para registrar un nuevo usuario médico
+    @MedicalSwaggerDocs.RegisterMedical
     @POST
     @Path("/register")
     public Response registerMedical(MedicalDtoRegister medicalRegister) throws Exception {
@@ -35,7 +36,7 @@ public class MedicalController {
         return Response.status(Response.Status.CREATED).build();
     }
      
-    // Método GET para obtener un usuario médico por su ID
+    @MedicalSwaggerDocs.GetMedicalById
     @GET
     @Path("/{id}")
     public Response getMedicalById(@PathParam("id") UUID id) throws Exception {
@@ -45,7 +46,7 @@ public class MedicalController {
         return Response.ok(medical).build();
     }
 
-    // Método GET para obtener todos los usuarios médicos (actualmente solo imprime un mensaje)
+    @MedicalSwaggerDocs.GetAllMedical
     @GET
     public Response getAllMedical(){
         // Devuelve una respuesta con el estado 200 (OK)
@@ -53,6 +54,7 @@ public class MedicalController {
     }
 
     // Toma un Medical y modifica sus horarios
+    @MedicalSwaggerDocs.UpdateSchedules
     @PUT
     @Path("/{id}/schedules")
     public Response updateSchedules(@PathParam("id") UUID id, SchedulesDtoUpdate scheduleDto) throws Exception{

@@ -1,6 +1,6 @@
 package exceptions.handler;
 
-import exceptions.EmailAlredyExistException;
+import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
 
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
     @Override
     public  Response toResponse(Exception e) { 
         if(e instanceof EntityNotFoundException) return entityNotFoundException(e);
-        if(e instanceof EmailAlredyExistException) return emailAlredyExistException(e);
+        if(e instanceof EntityAlredyExistException) return entityAlredyExistException(e);
         if(e instanceof IncorrectUsernameOrPasswordExpection) return incorrectUsernameOrPasswordException(e);
         if(e instanceof PasswordNotCoincidentException) return passwordNotCoincidentException(e);
         if(e instanceof InvalidFieldException) return invalidFieldException(e);
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         return createRespone(Response.Status.NOT_FOUND, e.getMessage());
     }
 
-    private Response emailAlredyExistException(Exception e){
+    private Response entityAlredyExistException(Exception e){
         return createRespone(Response.Status.CONFLICT, e.getMessage());
     }
     private Response incorrectUsernameOrPasswordException(Exception e){

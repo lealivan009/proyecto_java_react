@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import dto.request.PrescriptionDto;
 import dto.response.PrescriptionDtoResponse;
+import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -35,7 +36,7 @@ public class PrescriptionServiceImp implements PrescriptionService {
         var appointment = appointmentService.getAppointmentById(appointmentId);
 
         if(appointment.getPrescription() != null)
-            throw new Exception("There is already a prescription for this medical appointment");
+            throw new EntityAlredyExistException("There is already a prescription for this medical appointment");
 
         appointment.setPrescription(prescriptionToPersist);
         prescriptionRepo.persist(prescriptionToPersist);

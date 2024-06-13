@@ -5,9 +5,6 @@ import services.UserService;
 
 import java.util.UUID;
 
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
-
 import config.annotations.RegisterUser;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;

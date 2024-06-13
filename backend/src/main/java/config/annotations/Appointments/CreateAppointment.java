@@ -1,4 +1,4 @@
-package config.annotations;
+package config.annotations.Appointments;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

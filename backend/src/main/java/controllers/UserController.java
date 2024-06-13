@@ -5,7 +5,7 @@ import services.UserService;
 
 import java.util.UUID;
 
-import config.annotations.RegisterUser;
+import config.annotations.UserSwaggerDocs;
 import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
@@ -23,15 +23,15 @@ public class UserController {
     @Inject
     private UserService userService;
 
-
+    @UserSwaggerDocs.RegisterUser
     @POST
-    @RegisterUser()
     @Path("/register")
     public Response registerUser(UserDtoRegister userRegister) throws Exception {
         userService.registerAndSave(userRegister);
         return Response.status(Response.Status.CREATED).build();
     }
 
+    @UserSwaggerDocs.LoginUser
     @POST
     @Path("/login")
     public Response LoginUser(UserDtoLogin userLogin) throws Exception {

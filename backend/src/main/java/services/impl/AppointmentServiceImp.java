@@ -21,7 +21,11 @@ import java.time.LocalDateTime;
 
 import java.util.UUID;
 
-import config.annotations.CreateAppointment;
+import config.annotations.Appointments.CreateAppointment;
+import config.annotations.Appointments.DeleteAppointment;
+import config.annotations.Appointments.GetAllAppointment;
+import config.annotations.Appointments.GetAppointmentById;
+import config.annotations.Appointments.UpdateAppointment;
 import dto.request.AppointmentDto;
 import dto.request.NewAppointmentDto;
 import exceptions.AppointmentCancellationException;
@@ -46,10 +50,12 @@ public class AppointmentServiceImp implements AppointmentService{
     @Inject
     Validator validator;
 
+    @GetAllAppointment
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.listAll();
     }
 
+    @GetAppointmentById
     public Appointment getAppointmentById(UUID id) {
         return appointmentRepository.findById(id);
     }
@@ -89,6 +95,7 @@ public class AppointmentServiceImp implements AppointmentService{
     }
 
     @Transactional
+    @DeleteAppointment
     public void deleteAppointment(UUID idUser, LocalTime consultingDate) throws Exception{
         //Busco todos los turnos asociados al usuario que coincidan con la fecha y hora del turno pq sino me elimina todos los turnos de ese usuario
         List<Appointment> appointments = appointmentRepository.find("user.id = ?1 and consultingDate = ?2", idUser, consultingDate).list();
@@ -112,6 +119,7 @@ public class AppointmentServiceImp implements AppointmentService{
         }
     }
 
+    @UpdateAppointment
     public void updateAppointment(UUID idAppointment, NewAppointmentDto newAppointmentDto) throws Exception{
         //Obtener el turno médico a actualizar
         Appointment appointment = appointmentRepository.findById(idAppointment);

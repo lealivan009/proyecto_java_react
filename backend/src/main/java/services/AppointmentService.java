@@ -19,7 +19,7 @@ public interface AppointmentService {
 
     public void createAppointment(AppointmentDto appointmentDto) throws Exception;
 
-    public void deleteAppointment(UUID idUser, LocalTime consultingDate);
+    public void deleteAppointment(UUID idUser, LocalTime consultingDate) throws Exception;
 
     public void updateAppointment(UUID idAppointment, NewAppointmentDto newAppointmentDto) throws Exception;
 

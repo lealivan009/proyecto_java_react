@@ -21,9 +21,13 @@ import java.time.LocalDateTime;
 
 import java.util.UUID;
 
+import config.annotations.CreateAppointment;
 import dto.request.AppointmentDto;
 import dto.request.NewAppointmentDto;
+import exceptions.AppointmentCancellationException;
+import exceptions.ConsultationScheduleException;
 import exceptions.EntityNotFoundException;
+import exceptions.UserWithoutAppointmentException;
 
 @ApplicationScoped
 //capa de servicio que interactua con la capa de persistencia (repositorios JPA)
@@ -51,6 +55,7 @@ public class AppointmentServiceImp implements AppointmentService{
     }
 
     @Transactional
+    @CreateAppointment
     public void createAppointment(AppointmentDto appointmentDto) throws Exception{
         //valido que los campos de appointment no vengan vacios
         validator.validate(appointmentDto);
@@ -75,7 +80,7 @@ public class AppointmentServiceImp implements AppointmentService{
         
         //Si el horario del nuevo turno no está dentro de ningún horario de consulta, lanzar una excepción, sino crear el nuevo turno
         if (!disponible) {
-            throw new RuntimeException("El horario del turno está fuera de los horarios de consulta del médico");
+            throw new ConsultationScheduleException("El horario del turno está fuera de los horarios de consulta del médico");
         }else{
             //Uso la clase mapper para pasar de dto a entidad
             Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto);
@@ -84,13 +89,13 @@ public class AppointmentServiceImp implements AppointmentService{
     }
 
     @Transactional
-    public void deleteAppointment(UUID idUser, LocalTime consultingDate){
+    public void deleteAppointment(UUID idUser, LocalTime consultingDate) throws Exception{
         //Busco todos los turnos asociados al usuario que coincidan con la fecha y hora del turno pq sino me elimina todos los turnos de ese usuario
         List<Appointment> appointments = appointmentRepository.find("user.id = ?1 and consultingDate = ?2", idUser, consultingDate).list();
 
         // Verificar si el usuario tiene turnos asociados
         if (appointments.isEmpty()) {
-            throw new RuntimeException("El usuario no tiene turnos médicos asociados");
+            throw new UserWithoutAppointmentException("El usuario no tiene turnos médicos asociados");
         }
         // Iterar sobre cada turno del id de ese usuario
         for (Appointment appointment : appointments) {
@@ -99,7 +104,7 @@ public class AppointmentServiceImp implements AppointmentService{
 
             // Verificar si el tiempo actual es mayor a un día antes del turno
             if (LocalDateTime.now().isAfter(appointmentDateTime)) {
-                throw new RuntimeException("No se puede cancelar el turno médico porque ya ha pasado más de un día antes del turno");
+                throw new AppointmentCancellationException("No se puede cancelar el turno médico porque ya ha pasado más de un día antes del turno");
             }
 
             //Metodo que me da Panache en el repository para eliminar el turno en la bd
@@ -133,7 +138,7 @@ public class AppointmentServiceImp implements AppointmentService{
                 }
             }
             if (!disponible) {
-                throw new RuntimeException("El horario del turno está fuera de los horarios de consulta del médico");
+                throw new ConsultationScheduleException("El horario del turno está fuera de los horarios de consulta del médico");
             } else{
                 // Actualizar la fecha y hora de la cita
                 appointment.setConsultingDate(newAppointmentDto.consultingDate());

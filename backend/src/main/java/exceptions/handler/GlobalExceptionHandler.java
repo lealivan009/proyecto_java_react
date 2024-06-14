@@ -1,5 +1,7 @@
 package exceptions.handler;
 
+import exceptions.AppointmentCancellationException;
+import exceptions.ConsultationScheduleException;
 import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
 
@@ -9,6 +11,7 @@ import exceptions.ErrorDtoResponse;
 import exceptions.IncorrectUsernameOrPasswordExpection;
 import exceptions.InvalidFieldException;
 import exceptions.PasswordNotCoincidentException;
+import exceptions.UserWithoutAppointmentException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -24,6 +27,9 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         if(e instanceof IncorrectUsernameOrPasswordExpection) return incorrectUsernameOrPasswordException(e);
         if(e instanceof PasswordNotCoincidentException) return passwordNotCoincidentException(e);
         if(e instanceof InvalidFieldException) return invalidFieldException(e);
+        if(e instanceof ConsultationScheduleException) return consultationScheduleException(e);
+        if(e instanceof UserWithoutAppointmentException) return userWithAppointmentException(e);
+        if(e instanceof AppointmentCancellationException) return appointmentCancelationException(e);
         //Exception personalizada
 
         return errorServerException(e);
@@ -45,7 +51,15 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
     private Response invalidFieldException(Exception e){
         return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
     }
-
+    private Response consultationScheduleException(Exception e){
+        return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
+    }
+    private Response userWithAppointmentException(Exception e){
+        return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
+    }
+    private Response appointmentCancelationException(Exception e){
+        return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
+    }
     private Response errorServerException(Exception e){
         return createRespone(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
     }

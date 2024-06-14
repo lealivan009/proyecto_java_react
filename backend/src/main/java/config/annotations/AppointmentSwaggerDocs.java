@@ -10,9 +10,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 public class AppointmentSwaggerDocs {
     @APIResponses(value = {
-            @APIResponse(description = "Turno creado con éxito", responseCode = "201"),
-            @APIResponse(description = "Datos del turno no válidos", responseCode = "400"),
-            @APIResponse(description = "Error interno del servidor", responseCode = "500")
+        @APIResponse(description = "Turno creado con éxito", responseCode = "201"),
+        @APIResponse(description = "Datos del turno no válidos", responseCode = "400"),
+        @APIResponse(description = "Error interno del servidor", responseCode = "500")
     })
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
@@ -20,9 +20,9 @@ public class AppointmentSwaggerDocs {
     }
 
     @APIResponses(value = {
-            @APIResponse(description = "Turno eliminado con exito", responseCode = "201"),
-            @APIResponse(description = "El turno no se pudo eliminar", responseCode = "400"),
-            @APIResponse(description = "Error interno del servidor", responseCode = "500")
+        @APIResponse(description = "Turno eliminado con exito", responseCode = "201"),
+        @APIResponse(description = "El turno no se pudo eliminar", responseCode = "400"),
+        @APIResponse(description = "Error interno del servidor", responseCode = "500")
     })
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
@@ -30,9 +30,9 @@ public class AppointmentSwaggerDocs {
     }
 
     @APIResponses(value = {
-            @APIResponse(description = "Turnos encontrados", responseCode = "201"),
-            @APIResponse(description = "Turnos no encontrados", responseCode = "400"),
-            @APIResponse(description = "Error interno del servidor", responseCode = "500")
+        @APIResponse(description = "Turnos encontrados", responseCode = "201"),
+        @APIResponse(description = "Turnos no encontrados", responseCode = "400"),
+        @APIResponse(description = "Error interno del servidor", responseCode = "500")
     })
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
@@ -40,9 +40,9 @@ public class AppointmentSwaggerDocs {
     }
 
     @APIResponses(value = {
-            @APIResponse(description = "Turno actualizado con éxito", responseCode = "201"),
-            @APIResponse(description = "El turno no se ha podido actualizar", responseCode = "400"),
-            @APIResponse(description = "Error interno del servidor", responseCode = "500")
+        @APIResponse(description = "Turno actualizado con éxito", responseCode = "201"),
+        @APIResponse(description = "El turno no se ha podido actualizar", responseCode = "400"),
+        @APIResponse(description = "Error interno del servidor", responseCode = "500")
     })
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
@@ -50,9 +50,9 @@ public class AppointmentSwaggerDocs {
     }
 
     @APIResponses(value = {
-            @APIResponse(description = "Turno encontrado", responseCode = "200"),
-            @APIResponse(description = "Turno no encontrado", responseCode = "400"),
-            @APIResponse(description = "Error interno del servidor", responseCode = "500")
+        @APIResponse(description = "Turno encontrado", responseCode = "200"),
+        @APIResponse(description = "Turno no encontrado", responseCode = "400"),
+        @APIResponse(description = "Error interno del servidor", responseCode = "500")
     })
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)

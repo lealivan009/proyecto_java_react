@@ -58,7 +58,7 @@ public class MedicalServiceImp implements MedicalService {
 
         Schedules schedule = medical.getConsultingDates().stream()
             .filter(s -> s.getNameDay().equals(scheduleDto.nameDay()))
-            .findFirst().orElseThrow(()-> new Exception("The schedule is not listed"));
+            .findFirst().orElseThrow(()-> new EntityNotFoundException("The schedule is not listed"));
     
         // habilita/desabilita, modifica el horario segun el dia
         schedule.setConsultingEnable(scheduleDto.consultingEnable());

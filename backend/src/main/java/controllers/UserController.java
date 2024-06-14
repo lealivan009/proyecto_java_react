@@ -38,6 +38,7 @@ public class UserController {
         return Response.ok(userService.loginUser(userLogin)).build();
     }
 
+    @UserSwaggerDocs.UpdateUser
     @PUT
     @Path("/{id}")
     public Response updateUser(@PathParam("id") UUID id, UserDtoUpdate userUpdate) throws Exception{
@@ -45,12 +46,14 @@ public class UserController {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @UserSwaggerDocs.GetUserById
     @GET
     @Path("/{id}")
     public Response getUserById(@PathParam("id") UUID id) throws Exception {
         return Response.ok(UserMapper.userToDto(userService.findUserById(id))).build();
     }
 
+    @UserSwaggerDocs.DeleteUserById
     @DELETE
     @Path("/{id}")
     public Response deleteUser(@PathParam("id") UUID id) throws Exception{
@@ -58,6 +61,7 @@ public class UserController {
         return Response.noContent().build();
     }
 
+    @UserSwaggerDocs.GetAllUser
     @GET
     public Response getAllUser(){
         return Response.ok(userService.findAll()).build();

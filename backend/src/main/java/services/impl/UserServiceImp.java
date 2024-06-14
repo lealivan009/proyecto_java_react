@@ -8,7 +8,7 @@ import dto.request.UserDtoLogin;
 import dto.request.UserDtoRegister;
 import dto.request.UserDtoUpdate;
 import dto.response.PublicUserDtoResponse;
-import exceptions.EmailAlredyExistException;
+import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
 import exceptions.IncorrectUsernameOrPasswordExpection;
 import exceptions.PasswordNotCoincidentException;
@@ -41,7 +41,7 @@ public class UserServiceImp implements UserService {
 
         Optional<User> userEntity = userRepo.findByEmail(userRegister.email());
         if (userEntity.isPresent())
-            throw new EmailAlredyExistException("User with email [" + userRegister.email() + "] is already exist!");
+            throw new EntityAlredyExistException("User with email [" + userRegister.email() + "] is already exist!");
 
         User userToPersist = UserMapper.dtoToUser(userRegister);
         userToPersist.setEnable(true);

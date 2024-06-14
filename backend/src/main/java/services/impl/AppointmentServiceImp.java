@@ -45,10 +45,12 @@ public class AppointmentServiceImp implements AppointmentService{
     @Inject
     Validator validator;
 
+    @Override
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.listAll();
     }
 
+    @Override
     public Appointment getAppointmentById(UUID id) {
         return appointmentRepository.findById(id);
     }
@@ -78,7 +80,7 @@ public class AppointmentServiceImp implements AppointmentService{
         
         //Si el horario del nuevo turno no está dentro de ningún horario de consulta, lanzar una excepción, sino crear el nuevo turno
         if (!disponible) {
-            throw new ConsultationScheduleException("El horario del turno está fuera de los horarios de consulta del médico");
+            throw new ConsultationScheduleException();
         }else{
             //Uso la clase mapper para pasar de dto a entidad
             Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto);
@@ -93,7 +95,7 @@ public class AppointmentServiceImp implements AppointmentService{
 
         // Verificar si el usuario tiene turnos asociados
         if (appointments.isEmpty()) {
-            throw new UserWithoutAppointmentException("El usuario no tiene turnos médicos asociados");
+            throw new UserWithoutAppointmentException("User does not have associated medical appointments");
         }
         // Iterar sobre cada turno del id de ese usuario
         for (Appointment appointment : appointments) {
@@ -102,7 +104,7 @@ public class AppointmentServiceImp implements AppointmentService{
 
             // Verificar si el tiempo actual es mayor a un día antes del turno
             if (LocalDateTime.now().isAfter(appointmentDateTime)) {
-                throw new AppointmentCancellationException("No se puede cancelar el turno médico porque ya ha pasado más de un día antes del turno");
+                throw new AppointmentCancellationException("The medical appointment cannot be canceled because more than one day has already passed before the appointment");
             }
 
             //Metodo que me da Panache en el repository para eliminar el turno en la bd
@@ -116,7 +118,7 @@ public class AppointmentServiceImp implements AppointmentService{
         
         // Verificar si el turno médico existe
         if (appointment == null) {
-            throw new EntityNotFoundException("El turno médico con ID " + idAppointment + " no existe");
+            throw new EntityNotFoundException("Medical schedele not found with id " + idAppointment);
         }
         
         // Verificar si hay cambios en la fecha y hora de la cita
@@ -136,7 +138,7 @@ public class AppointmentServiceImp implements AppointmentService{
                 }
             }
             if (!disponible) {
-                throw new ConsultationScheduleException("El horario del turno está fuera de los horarios de consulta del médico");
+                throw new ConsultationScheduleException();
             } else{
                 // Actualizar la fecha y hora de la cita
                 appointment.setConsultingDate(newAppointmentDto.consultingDate());

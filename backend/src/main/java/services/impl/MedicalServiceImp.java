@@ -3,6 +3,7 @@ package services.impl;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
@@ -17,6 +18,7 @@ import mapper.MedicalMapper;
 import mapper.SchedulesMapper;
 import models.Medical;
 import models.Schedules;
+import models.enumerations.SpecialityType;
 import repositories.MedicalRepository;
 import services.MedicalService;
 import validator.Validator;
@@ -43,6 +45,25 @@ public class MedicalServiceImp implements MedicalService {
         //valido campos de medico
         validator.validate(medicalDtoRegister);
         // Convierte el DTO a un objeto Medical
+        Optional<Medical> medical=medicalRepo.findByMatricule(medicalDtoRegister.matricule());
+        
+        // Validar que no exista otro medico con la misma matricula
+        if(medical.isPresent()){
+            throw new Exception("This matricule exist!");
+        }
+
+        // Validar que el horario de finalizacion no sea menor al de inicio
+        if (medicalDtoRegister.endTime().isBefore(medicalDtoRegister.startTime())) {
+            throw new Exception("End time cannot be earlier than start time");
+        }
+
+        //Validar que exista especialidad
+        try {
+            SpecialityType.valueOf(medicalDtoRegister.medicalSpeciality().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new Exception("Speciality does not exist!");
+        }
+
         Medical medicalPersist = MedicalMapper.dtoToMedical(medicalDtoRegister);
 
         // Asigna la lista de horarios de consulta al médico
@@ -53,23 +74,36 @@ public class MedicalServiceImp implements MedicalService {
     }
 
     @Transactional
-    public void modifySchedules(UUID id, SchedulesDtoUpdate scheduleDto) throws Exception{
+    public void modifySchedules(UUID id, SchedulesDtoUpdate scheduleDto) throws Exception {
         Medical medical = getMedicalById(id);
-
+    
         Schedules schedule = medical.getConsultingDates().stream()
             .filter(s -> s.getNameDay().equals(scheduleDto.nameDay()))
-            .findFirst().orElseThrow(()-> new EntityNotFoundException("The schedule is not listed"));
+            .findFirst()
+            .orElseThrow(() -> new EntityNotFoundException("The schedule is not listed"));
     
-        // habilita/desabilita, modifica el horario segun el dia
+        // Habilita/deshabilita, modifica el horario según el día
         schedule.setConsultingEnable(scheduleDto.consultingEnable());
-        if(scheduleDto.startTime() != null) 
+    
+        // Validación del horario
+        if (scheduleDto.startTime() != null && scheduleDto.endTime() != null) {
+            if (scheduleDto.endTime().isBefore(scheduleDto.startTime())) {
+                throw new Exception("End time cannot be earlier than start time");
+            }
+        }
+    
+        if (scheduleDto.startTime() != null) {
             schedule.setStartTime(scheduleDto.startTime());
-        if(scheduleDto.endTime() != null ) 
+        }
+        if (scheduleDto.endTime() != null) {
             schedule.setEndTime(scheduleDto.endTime());
-        //remueve el horario viejo y asigna el horario nuevo
+        }
+    
+        // Remueve el horario viejo y asigna el horario nuevo
         medical.getConsultingDates().removeIf(s -> s.getNameDay().equals(scheduleDto.nameDay()));
         medical.getConsultingDates().add(schedule);
     }
+    
 
     private List<Schedules> loadSchedules(MedicalDtoRegister medicalDto) {
         List<Schedules> scheduleslist = new ArrayList<>(5);

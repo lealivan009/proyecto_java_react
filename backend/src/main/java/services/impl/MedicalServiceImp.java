@@ -12,6 +12,7 @@ import dto.request.SchedulesDtoUpdate;
 import dto.response.SpecialistSchedulesDtoResponse;
 import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
+import exceptions.InvalidStartEndTimeException;
 import exceptions.SpecialityNotExistException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -104,7 +105,7 @@ public class MedicalServiceImp implements MedicalService {
      */
     private void starTimeEndTimeValidate(LocalTime startTime, LocalTime endTime) throws Exception{
         if(startTime.isAfter(endTime))
-            throw new Exception("End time cannot be earlier than start time");
+            throw new InvalidStartEndTimeException();
     }
     
 

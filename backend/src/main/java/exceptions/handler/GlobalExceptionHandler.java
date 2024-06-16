@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 import exceptions.IncorrectUsernameOrPasswordExpection;
 import exceptions.InvalidFieldException;
+import exceptions.InvalidStartEndTimeException;
 import exceptions.PasswordNotCoincidentException;
 import exceptions.SpecialityNotExistException;
 import exceptions.UserWithoutAppointmentException;
@@ -31,6 +32,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         if(e instanceof UserWithoutAppointmentException) return userWithAppointmentException(e);
         if(e instanceof AppointmentCancellationException) return appointmentCancelationException(e);
         if(e instanceof SpecialityNotExistException) return specialityNotExistException(e);
+        if(e instanceof InvalidStartEndTimeException) return invalidStartEndTimeException(e);
         //Exception personalizada
 
         return errorServerException(e);
@@ -62,6 +64,9 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
     }
     private Response specialityNotExistException(Exception e){
+        return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
+    }
+    private Response invalidStartEndTimeException(Exception e){
         return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
     }
     private Response errorServerException(Exception e){

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
+import dto.response.MedicalDtoResponse;
 import dto.response.SpecialistSchedulesDtoResponse;
 import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
@@ -39,11 +40,16 @@ public interface MedicalService {
     Medical getMedicalById(UUID id) throws EntityNotFoundException;
 
     /**
-     * Obtiene todos los médicos y los convierte en una lista de FullMedicalUserDTO.
-     * 
-     * @return lista de todos los médicos convertidos a FullMedicalUserDTO
+     * Obtiene todos los medicos con sus horarios de la base de datos
+     * @return Lista de Medical
      */
-    public Object findAll();
+    public List<Medical> findAll();
+
+    /**
+     * Obtiene todos los médicos y los convierte en una lista de MedicalDtoResponse.
+     * @return lista de todos los médicos convertidos a MedicalDtoResponse
+     */
+    public List<MedicalDtoResponse> findAllMedicalDto();
 
     /**
      * Metodo que modifica los horarios de cada Medical

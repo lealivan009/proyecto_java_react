@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
+import dto.response.MedicalDtoResponse;
 import dto.response.SpecialistSchedulesDtoResponse;
 import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
@@ -129,8 +130,13 @@ public class MedicalServiceImp implements MedicalService {
                 .orElseThrow(() -> new EntityNotFoundException("Medical not found with id: " + id));
     }
 
+    @Override
     public List<Medical> findAll() {
-        return medicalRepo.listAll();
+        return medicalRepo.findAll().list();
+    }
+
+    public List<MedicalDtoResponse> findAllMedicalDto() {
+        return medicalRepo.findAllMedicalDto();
     }
 
     @Override

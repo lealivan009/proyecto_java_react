@@ -50,7 +50,7 @@ public class MedicalController {
     @GET
     public Response getAllMedical(){
         // Devuelve una respuesta con el estado 200 (OK)
-        return Response.ok(medicalService.findAll()).build();
+        return Response.ok(medicalService.findAllMedicalDto()).build();
     }
 
     // Toma un Medical y modifica sus horarios

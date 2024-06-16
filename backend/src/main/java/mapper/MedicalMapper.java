@@ -1,7 +1,7 @@
 package mapper;
 
 import dto.request.MedicalDtoRegister;
-import dto.response.ParcialSpecialistDto;
+import dto.response.SpecialistSchedulesDtoResponse;
 import models.Medical;
 import models.enumerations.SpecialityType;
 
@@ -33,11 +33,15 @@ public class MedicalMapper {
                 .build();
     }
 
-    public static ParcialSpecialistDto entityToDto(Medical entity){
-        return new ParcialSpecialistDto(
+    //mappea un dto de medico con los horarios activos
+    public static SpecialistSchedulesDtoResponse entityToDto(Medical entity){
+        return new SpecialistSchedulesDtoResponse(
+            entity.getId(),
             entity.getFullname(),
             entity.getSpecialityType(),
-            entity.getConsultingDates(),
+            entity.getConsultingDates().stream()
+                .filter(s -> s.isConsultingEnable())
+                .map(SchedulesMapper::entityToDto).toList(),
             entity.getConsultingPlace()
         );
     }

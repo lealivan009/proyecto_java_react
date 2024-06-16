@@ -8,14 +8,13 @@ import java.util.UUID;
 
 import dto.request.MedicalDtoRegister;
 import dto.request.SchedulesDtoUpdate;
-import dto.response.ParcialSpecialistDto;
 import dto.response.SpecialistSchedulesDtoResponse;
+import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import mapper.MedicalMapper;
-import mapper.SchedulesMapper;
 import models.Medical;
 import models.Schedules;
 import models.enumerations.SpecialityType;
@@ -49,7 +48,7 @@ public class MedicalServiceImp implements MedicalService {
         
         // Validar que no exista otro medico con la misma matricula
         if(medical.isPresent()){
-            throw new Exception("This matricule exist!");
+            throw new EntityAlredyExistException("This matricule exist!");
         }
 
         // Validar que el horario de finalizacion no sea menor al de inicio
@@ -140,30 +139,10 @@ public class MedicalServiceImp implements MedicalService {
         return medicalRepo.listAll();
     }
 
-    //crea dtos de medico y horarios disponibles
+    //crea dtos de medico y horarios activos/disponibles
     @Override
     public List<SpecialistSchedulesDtoResponse> getAllSpeciality() {
-        List<SpecialistSchedulesDtoResponse> specialists = new ArrayList<>();
         var medicals = findAll() ; 
-
-        medicals.stream().forEach(
-            medical -> {
-                //dto intermedio de specialist
-                ParcialSpecialistDto medicalDto =  MedicalMapper.entityToDto(medical);
-                specialists.add(
-                    //dto completo medico con horario disponible
-                    new SpecialistSchedulesDtoResponse(
-                        medicalDto.fullname(), 
-                        medicalDto.specialityType(),
-                        medicalDto.consultingDates().stream()
-                            .filter(s -> s.isConsultingEnable())
-                            .map(s -> SchedulesMapper.entityToDto(s)).toList(),
-                        medicalDto.consultingPlace()
-                    )
-                );
-            }
-        );
-        return specialists;
-    }
-
+        return medicals.stream().map(MedicalMapper::entityToDto).toList();
+    } 
 }

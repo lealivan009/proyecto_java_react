@@ -26,6 +26,7 @@ import dto.request.NewAppointmentDto;
 import exceptions.AppointmentCancellationException;
 import exceptions.ConsultationScheduleException;
 import exceptions.EntityNotFoundException;
+import exceptions.InvalidFieldException;
 import exceptions.UserWithoutAppointmentException;
 
 @ApplicationScoped
@@ -56,7 +57,7 @@ public class AppointmentServiceImp implements AppointmentService{
     }
 
     @Transactional
-    public void createAppointment(AppointmentDto appointmentDto) throws Exception{
+    public void createAppointment(AppointmentDto appointmentDto) throws InvalidFieldException, EntityNotFoundException, ConsultationScheduleException{
         //valido que los campos de appointment no vengan vacios
         validator.validate(appointmentDto);
         //busco que el usuario coincida con el usuario del turno y sino coincide ya larga la excepcion en el service
@@ -89,7 +90,7 @@ public class AppointmentServiceImp implements AppointmentService{
     }
 
     @Transactional
-    public void deleteAppointment(UUID idUser, LocalTime consultingDate) throws Exception{
+    public void deleteAppointment(UUID idUser, LocalTime consultingDate) throws UserWithoutAppointmentException, AppointmentCancellationException {
         //Busco todos los turnos asociados al usuario que coincidan con la fecha y hora del turno pq sino me elimina todos los turnos de ese usuario
         List<Appointment> appointments = appointmentRepository.find("user.id = ?1 and consultingDate = ?2", idUser, consultingDate).list();
 
@@ -112,7 +113,7 @@ public class AppointmentServiceImp implements AppointmentService{
         }
     }
 
-    public void updateAppointment(UUID idAppointment, NewAppointmentDto newAppointmentDto) throws Exception{
+    public void updateAppointment(UUID idAppointment, NewAppointmentDto newAppointmentDto) throws EntityNotFoundException, ConsultationScheduleException {
         //Obtener el turno médico a actualizar
         Appointment appointment = appointmentRepository.findById(idAppointment);
         

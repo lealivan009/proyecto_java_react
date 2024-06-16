@@ -13,9 +13,10 @@ public class MedicalMapper {
      * 
      * @param register DTO de registro de médico
      * @return Objeto Medical creado a partir del DTO
+     * @throws SpecialityNotExistException 
      * @throws Exception si la especialidad médica no es válida
      */
-    public static Medical dtoToMedical(MedicalDtoRegister register) throws Exception {
+    public static Medical dtoToMedical(MedicalDtoRegister register) throws SpecialityNotExistException {
         SpecialityType specialityType;
         try {
             // Intenta obtener el tipo de especialidad médica desde el DTO
@@ -35,7 +36,7 @@ public class MedicalMapper {
     }
 
     //mappea un dto de medico con los horarios activos
-    public static SpecialistSchedulesDtoResponse entityToDto(Medical entity){
+    public static SpecialistSchedulesDtoResponse entityToDto(Medical entity) {
         return new SpecialistSchedulesDtoResponse(
             entity.getId(),
             entity.getFullname(),

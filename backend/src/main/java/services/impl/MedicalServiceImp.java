@@ -12,6 +12,7 @@ import dto.request.SchedulesDtoUpdate;
 import dto.response.SpecialistSchedulesDtoResponse;
 import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
+import exceptions.InvalidFieldException;
 import exceptions.InvalidStartEndTimeException;
 import exceptions.SpecialityNotExistException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,7 +38,7 @@ public class MedicalServiceImp implements MedicalService {
     
     @Transactional
     @Override
-    public void registerAndSave(MedicalDtoRegister medicalDtoRegister) throws Exception {
+    public void registerAndSave(MedicalDtoRegister medicalDtoRegister) throws InvalidFieldException, EntityAlredyExistException, SpecialityNotExistException, InvalidStartEndTimeException {
         //valido campos de medico
         validator.validate(medicalDtoRegister);
         Optional<Medical> medical=medicalRepo.findByMatricule(medicalDtoRegister.matricule());
@@ -67,7 +68,7 @@ public class MedicalServiceImp implements MedicalService {
     }
 
     @Transactional
-    public void modifySchedules(UUID id, SchedulesDtoUpdate scheduleDto) throws Exception {
+    public void modifySchedules(UUID id, SchedulesDtoUpdate scheduleDto) throws EntityNotFoundException, InvalidStartEndTimeException {
         Medical medical = getMedicalById(id);
     
         Schedules schedule = medical.getConsultingDates().stream()
@@ -101,9 +102,9 @@ public class MedicalServiceImp implements MedicalService {
      * Valida que el horario de comienzo no sea despues del de cierre
      * @param startTime horario de comienzo de turno
      * @param endTime horario de cierre del turno
-     * @throws Exception 
+     * @throws InvalidStartEndTimeException 
      */
-    private void starTimeEndTimeValidate(LocalTime startTime, LocalTime endTime) throws Exception{
+    private void starTimeEndTimeValidate(LocalTime startTime, LocalTime endTime) throws InvalidStartEndTimeException {
         if(startTime.isAfter(endTime))
             throw new InvalidStartEndTimeException();
     }
@@ -123,7 +124,7 @@ public class MedicalServiceImp implements MedicalService {
     }
 
     @Override
-    public Medical getMedicalById(UUID id) throws Exception {
+    public Medical getMedicalById(UUID id) throws EntityNotFoundException  {
         return medicalRepo.findByIdOptional(id)
                 .orElseThrow(() -> new EntityNotFoundException("Medical not found with id: " + id));
     }

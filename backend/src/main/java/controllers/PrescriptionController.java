@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.UUID;
 
+import config.annotations.PrescriptionSwaggerDocs;
 import dto.request.PrescriptionDto;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -17,6 +18,7 @@ public class PrescriptionController {
     @Inject
     PrescriptionService prescriptionService;
     
+    @PrescriptionSwaggerDocs.SavePresciption
     @POST
     @Path("/{appointmentId}")
     public Response savePrescription(@PathParam("appointmentId") UUID appointmentId, PrescriptionDto prescriptionDto) throws Exception{
@@ -24,6 +26,7 @@ public class PrescriptionController {
         return Response.status(Response.Status.CREATED).build();
     }
 
+    @PrescriptionSwaggerDocs.GetPrescription
     @GET
     @Path("/{id}")
     public Response getPresciption(@PathParam("id") UUID id) throws Exception{

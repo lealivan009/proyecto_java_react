@@ -1,5 +1,6 @@
 package controllers;
 
+import config.annotations.SpecialistSwaggerDocs;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -17,6 +18,7 @@ public class SpecialistController{
     @Inject
     private MedicalService medicalService;
 
+    @SpecialistSwaggerDocs.GetAllSpecialists
     @GET
     public Response getAllSpecialists(){
         return Response.ok(medicalService.getAllSpeciality()).build();

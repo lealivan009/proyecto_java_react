@@ -1,6 +1,7 @@
 package services.impl;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import dto.request.SchedulesDtoUpdate;
 import dto.response.SpecialistSchedulesDtoResponse;
 import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
+import exceptions.SpecialityNotExistException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -31,19 +33,12 @@ public class MedicalServiceImp implements MedicalService {
     @Inject
     Validator validator;
 
-    /**
-     * Registra y guarda un nuevo médico en la base de datos.
-     * 
-     * @param medicalDtoRegister DTO con los datos de registro del médico
-     * @throws Exception si ocurre algún error durante el proceso de registro y
-     *                   guardado
-     */
+    
     @Transactional
     @Override
     public void registerAndSave(MedicalDtoRegister medicalDtoRegister) throws Exception {
         //valido campos de medico
         validator.validate(medicalDtoRegister);
-        // Convierte el DTO a un objeto Medical
         Optional<Medical> medical=medicalRepo.findByMatricule(medicalDtoRegister.matricule());
         
         // Validar que no exista otro medico con la misma matricula
@@ -52,15 +47,13 @@ public class MedicalServiceImp implements MedicalService {
         }
 
         // Validar que el horario de finalizacion no sea menor al de inicio
-        if (medicalDtoRegister.endTime().isBefore(medicalDtoRegister.startTime())) {
-            throw new Exception("End time cannot be earlier than start time");
-        }
+        starTimeEndTimeValidate(medicalDtoRegister.startTime(), medicalDtoRegister.endTime());
 
         //Validar que exista especialidad
         try {
             SpecialityType.valueOf(medicalDtoRegister.medicalSpeciality().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new Exception("Speciality does not exist!");
+        } catch (Exception e) {
+            throw new SpecialityNotExistException();
         }
 
         Medical medicalPersist = MedicalMapper.dtoToMedical(medicalDtoRegister);
@@ -81,26 +74,37 @@ public class MedicalServiceImp implements MedicalService {
             .findFirst()
             .orElseThrow(() -> new EntityNotFoundException("The schedule is not listed"));
     
-        // Habilita/deshabilita, modifica el horario según el día
-        schedule.setConsultingEnable(scheduleDto.consultingEnable());
-    
+        
         // Validación del horario
         if (scheduleDto.startTime() != null && scheduleDto.endTime() != null) {
-            if (scheduleDto.endTime().isBefore(scheduleDto.startTime())) {
-                throw new Exception("End time cannot be earlier than start time");
-            }
+            starTimeEndTimeValidate(scheduleDto.startTime(), scheduleDto.endTime());
+            schedule.setStartTime(scheduleDto.startTime());
+            schedule.setEndTime(scheduleDto.endTime());
         }
-    
         if (scheduleDto.startTime() != null) {
+            starTimeEndTimeValidate(scheduleDto.startTime(), schedule.getEndTime());
             schedule.setStartTime(scheduleDto.startTime());
         }
         if (scheduleDto.endTime() != null) {
+            starTimeEndTimeValidate(schedule.getStartTime(), scheduleDto.endTime());
             schedule.setEndTime(scheduleDto.endTime());
         }
-    
+        schedule.setConsultingEnable(scheduleDto.consultingEnable());
+        
         // Remueve el horario viejo y asigna el horario nuevo
         medical.getConsultingDates().removeIf(s -> s.getNameDay().equals(scheduleDto.nameDay()));
         medical.getConsultingDates().add(schedule);
+    }
+
+    /**
+     * Valida que el horario de comienzo no sea despues del de cierre
+     * @param startTime horario de comienzo de turno
+     * @param endTime horario de cierre del turno
+     * @throws Exception 
+     */
+    private void starTimeEndTimeValidate(LocalTime startTime, LocalTime endTime) throws Exception{
+        if(startTime.isAfter(endTime))
+            throw new Exception("End time cannot be earlier than start time");
     }
     
 
@@ -117,32 +121,19 @@ public class MedicalServiceImp implements MedicalService {
         return scheduleslist;
     }
 
-    /**
-     * Obtiene un médico por su ID.
-     * 
-     * @param id ID del médico a buscar
-     * @return el médico encontrado
-     * @throws Exception si el médico no se encuentra en la base de datos
-     */
     @Override
     public Medical getMedicalById(UUID id) throws Exception {
         return medicalRepo.findByIdOptional(id)
                 .orElseThrow(() -> new EntityNotFoundException("Medical not found with id: " + id));
     }
 
-    /**
-     * Obtiene todos los médicos y los convierte en una lista de FullMedicalUserDTO.
-     * 
-     * @return lista de todos los médicos convertidos a FullMedicalUserDTO
-     */
     public List<Medical> findAll() {
         return medicalRepo.listAll();
     }
 
-    //crea dtos de medico y horarios activos/disponibles
     @Override
     public List<SpecialistSchedulesDtoResponse> getAllSpeciality() {
-        var medicals = findAll() ; 
+        var medicals = findAll(); 
         return medicals.stream().map(MedicalMapper::entityToDto).toList();
     } 
 }

@@ -2,6 +2,7 @@ package mapper;
 
 import dto.request.MedicalDtoRegister;
 import dto.response.SpecialistSchedulesDtoResponse;
+import exceptions.SpecialityNotExistException;
 import models.Medical;
 import models.enumerations.SpecialityType;
 
@@ -21,7 +22,7 @@ public class MedicalMapper {
             specialityType = SpecialityType.valueOf(register.medicalSpeciality());
         } catch (Exception e) {
             // Si ocurre un error al obtener el tipo de especialidad, lanza una excepción
-            throw new Exception("Invalid medical speciality: " + register.medicalSpeciality());
+            throw new SpecialityNotExistException();
         }
 
         // Crea y devuelve un objeto Medical utilizando el constructor builder

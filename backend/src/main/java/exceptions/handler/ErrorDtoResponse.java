@@ -1,4 +1,4 @@
-package exceptions;
+package exceptions.handler;
 
 import java.time.LocalDateTime;
 

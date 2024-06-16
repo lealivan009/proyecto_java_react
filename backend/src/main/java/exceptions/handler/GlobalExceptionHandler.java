@@ -7,10 +7,10 @@ import exceptions.EntityNotFoundException;
 
 import java.time.LocalDateTime;
 
-import exceptions.ErrorDtoResponse;
 import exceptions.IncorrectUsernameOrPasswordExpection;
 import exceptions.InvalidFieldException;
 import exceptions.PasswordNotCoincidentException;
+import exceptions.SpecialityNotExistException;
 import exceptions.UserWithoutAppointmentException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -30,6 +30,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         if(e instanceof ConsultationScheduleException) return consultationScheduleException(e);
         if(e instanceof UserWithoutAppointmentException) return userWithAppointmentException(e);
         if(e instanceof AppointmentCancellationException) return appointmentCancelationException(e);
+        if(e instanceof SpecialityNotExistException) return specialityNotExistException(e);
         //Exception personalizada
 
         return errorServerException(e);
@@ -58,6 +59,9 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
         return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
     }
     private Response appointmentCancelationException(Exception e){
+        return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
+    }
+    private Response specialityNotExistException(Exception e){
         return createRespone(Response.Status.BAD_REQUEST, e.getMessage());
     }
     private Response errorServerException(Exception e){

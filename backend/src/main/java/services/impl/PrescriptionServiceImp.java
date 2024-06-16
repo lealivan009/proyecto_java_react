@@ -6,6 +6,7 @@ import dto.request.PrescriptionDto;
 import dto.response.PrescriptionDtoResponse;
 import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
+import exceptions.InvalidFieldException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -30,7 +31,7 @@ public class PrescriptionServiceImp implements PrescriptionService {
 
     @Override
     @Transactional
-    public void savePresciption(UUID appointmentId, PrescriptionDto prescriptionDto) throws Exception {
+    public void savePresciption(UUID appointmentId, PrescriptionDto prescriptionDto) throws InvalidFieldException, EntityAlredyExistException {
         validator.validate(prescriptionDto);
         var prescriptionToPersist = PrescriptionMapper.dtoToEntity(prescriptionDto);
         var appointment = appointmentService.getAppointmentById(appointmentId);
@@ -43,7 +44,7 @@ public class PrescriptionServiceImp implements PrescriptionService {
     }
     
     @Override
-    public PrescriptionDtoResponse getPrescription(UUID prescriptionId) throws Exception {
+    public PrescriptionDtoResponse getPrescription(UUID prescriptionId) throws EntityNotFoundException {
         Prescription pres = prescriptionRepo.findByIdOptional(prescriptionId)
             .orElseThrow(()-> new EntityNotFoundException("Prescription not found with id "+ prescriptionId.toString()));
         return PrescriptionMapper.entityToDto(pres);

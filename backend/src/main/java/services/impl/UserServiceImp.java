@@ -11,6 +11,7 @@ import dto.response.PublicUserDtoResponse;
 import exceptions.EntityAlredyExistException;
 import exceptions.EntityNotFoundException;
 import exceptions.IncorrectUsernameOrPasswordExpection;
+import exceptions.InvalidFieldException;
 import exceptions.PasswordNotCoincidentException;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,7 +34,7 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public void registerAndSave(UserDtoRegister userRegister) throws Exception {
+    public void registerAndSave(UserDtoRegister userRegister) throws InvalidFieldException, PasswordNotCoincidentException, EntityAlredyExistException  {
         //valida campos de entrada obligatorios y que las contraseñas coincidan
         validator.validate(userRegister);
         if(!userRegister.password().equals(userRegister.repeatPassword()))
@@ -50,7 +51,7 @@ public class UserServiceImp implements UserService {
     }
     
     @Override
-    public PublicUserDtoResponse loginUser(UserDtoLogin userLogin) throws Exception {
+    public PublicUserDtoResponse loginUser(UserDtoLogin userLogin) throws InvalidFieldException, IncorrectUsernameOrPasswordExpection{
         validator.validate(userLogin);
 
         User userEntity = userRepo.findByEmail(userLogin.email()).orElseThrow(()-> new IncorrectUsernameOrPasswordExpection());
@@ -66,13 +67,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User findUserById(UUID id) throws Exception {
+    public User findUserById(UUID id) throws EntityNotFoundException {
         return userRepo.findByIdOptional(id).orElseThrow(() -> new EntityNotFoundException("User not exist with id " + id));
     }
 
     @Transactional
     @Override
-    public void updateUser(UUID id, UserDtoUpdate userUpdate) throws Exception {
+    public void updateUser(UUID id, UserDtoUpdate userUpdate) throws InvalidFieldException, EntityNotFoundException {
         validator.validate(userUpdate);
         User userEntity = findUserById(id);
         
@@ -95,7 +96,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(UUID id) throws Exception {
+    public void deleteUser(UUID id) throws EntityNotFoundException  {
         var userEntity = findUserById(id);
         userRepo.softDelete(userEntity);
     }

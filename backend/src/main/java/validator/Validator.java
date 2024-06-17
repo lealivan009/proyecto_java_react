@@ -10,6 +10,12 @@ public class Validator {
     @Inject
     jakarta.validation.Validator validator;
 
+
+    /**
+     * Valida los campos de entrada con ayuda de los DTO y las anotaciones indicadas en sus atributos
+     * @param objToValidate del tipo Object y es comunmente un DTO
+     * @throws InvalidFieldException
+     */
     public void validate(Object objToValidate) throws InvalidFieldException {
         var contrains = validator.validate(objToValidate);
         if (!contrains.isEmpty()) {

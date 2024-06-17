@@ -26,16 +26,25 @@ You can run your application in dev mode that enables live coding using:
 ```
 
 
-## Java Structure
-```
+# Strucure and Dependencies
+
+Utilizamos una estructura de carpetas donde nos permite separar las responsabilidades de cada clase agrupandolas de la siguiente manera.
+
+### Java Structure
+
+Un pantallazo rapido de la estructura de carpetas elejida para llevar a delante esta API.
+
+```bash
 ├───main
 │   ├───docker
 │   ├───java
+│   │   ├───config
+│   │   │   └───annotations
 │   │   ├───controllers
 │   │   ├───dto
 │   │   │   ├───request
 │   │   │   └───response
-│   │   ├───Exception
+│   │   ├───exceptions
 │   │   │   └───handler
 │   │   ├───mapper
 │   │   ├───models
@@ -51,7 +60,26 @@ You can run your application in dev mode that enables live coding using:
             └───acme
 ```
 
-## Dependencies
+- **config**:
+  -  **annotations**: Anotaciones perzonalizadas para customizar la api de Swagger.
+- **controllers**: Los cuales especifican las rutas de recursos que estan disponible.
+- **dto**
+    - **request**: Objetos de transferencia de datos (DTO) para datos de entrada a la aplicacion. 
+    - **response**: Objetos de transferencia de datos para datos de salida como respuesta.
+- **exceptions**: Donde se encuentran todas las clases de ecepciones personalizadas.
+- **handler**: Handler para capturar y tratar esas ecepciones.
+- **mapper**: Clases de mapeos para objetos. 
+- **models**: Capa de persistencia donde estan definidas las entidades y relaciones. 
+    - **enumeratios**: Enums utiles para estas entidades.
+- **repository**: Capa DAO donde se hacen las querys y consultas a base de datos.
+- **services**: Especificacion de la logica de negocio.
+    - **impl**: Implementacion de estas especificaciones de negocio. 
+- **validator**: Clases para validar datos de entrada utilizando como apoyo lo DTO.
+- **resources**: Contenido de archivos de propiedades y configuraciones de la aplicacion.
+
+
+
+## Dependencies utilizadas
  - `Lombok`
  - `quarkus-resteasy`
  - `quarkus-resteasy-jsonb`
@@ -63,7 +91,6 @@ You can run your application in dev mode that enables live coding using:
  - `quarkus-smallrye-openai`
  - `quarkus-jdbc-mysql`
  - `quarkus-jdbc-h2`
- - `quarkus-jdbc`
  - `rest-assured`
 
 

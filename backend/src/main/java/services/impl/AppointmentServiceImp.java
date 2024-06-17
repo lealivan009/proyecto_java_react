@@ -113,6 +113,7 @@ public class AppointmentServiceImp implements AppointmentService{
         }
     }
 
+    @Transactional
     public void updateAppointment(UUID idAppointment, NewAppointmentDto newAppointmentDto) throws EntityNotFoundException, ConsultationScheduleException {
         //Obtener el turno médico a actualizar
         Appointment appointment = appointmentRepository.findById(idAppointment);

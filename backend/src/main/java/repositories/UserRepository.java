@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import dto.response.PublicUserDtoResponse;
+import dto.response.UserDtoResponse;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 import models.User;
@@ -17,8 +17,8 @@ public class UserRepository implements PanacheRepositoryBase<User, UUID> {
         return find("email",email).firstResultOptional();
     }
     
-    public List<PublicUserDtoResponse> findAllPublicUserDto(){
-        return findAll().project(PublicUserDtoResponse.class).list();
+    public List<UserDtoResponse> findAllPublicUserDto(){
+        return findAll().project(UserDtoResponse.class).list();
     }
 
     public void softDelete(User user){

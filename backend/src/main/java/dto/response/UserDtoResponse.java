@@ -3,13 +3,15 @@ package dto.response;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public record UserDtoResponse(
     UUID id,
     String email,
-    String password,
     String photo,
     String name,
     String lastname,
     String dni,
-    LocalDate birthName
+    LocalDate birthDate
 ) {}

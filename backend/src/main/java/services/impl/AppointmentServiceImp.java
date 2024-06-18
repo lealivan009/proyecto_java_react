@@ -45,6 +45,10 @@ public class AppointmentServiceImp implements AppointmentService{
     @Inject
     Validator validator;
 
+    public AppointmentServiceImp(Validator validator) {
+        this.validator = validator;
+    }
+
     @Override
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.listAll();

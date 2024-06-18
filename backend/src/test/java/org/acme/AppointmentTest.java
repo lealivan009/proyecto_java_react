@@ -20,7 +20,6 @@ import java.time.*;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 
-
 public class AppointmentTest{
 
     @InjectMocks //aplico a la clase que estoy testeando
@@ -41,6 +40,7 @@ public class AppointmentTest{
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this); // Inicializa los mocks antes de cada prueba
+        validator = Mockito.mock(Validator.class);
         assertNotNull(validator); 
     }
 

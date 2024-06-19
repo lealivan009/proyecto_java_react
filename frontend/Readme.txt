@@ -1,1 +1,0 @@
-Proyecto creado con React

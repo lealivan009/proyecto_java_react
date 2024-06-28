@@ -53,7 +53,7 @@ export default function NavBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      <NavBarMovile />
+      
       <Box component="main" pt={30}>
         <Outlet />
       </Box>

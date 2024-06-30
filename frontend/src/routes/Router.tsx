@@ -15,6 +15,7 @@ import CreateUpdateAppointment from "../pages/CreateUpdateAppointment";
 import Medicals from "../pages/Medicals";
 import MedicalScheludes from "../pages/MedicalScheludes";
 import NavBar from "../pages/NavBar";
+import MedicalSchedules from "../pages/MedicalScheludes";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path="my-appointments" element={<Appointments />} />
       <Route path="medical-schedules" element={<MedicalScheludes />} />
       <Route path="medicals" element={<Medicals />} />
+      <Route path="/details/:id" element={<MedicalSchedules />} />
       <Route path="create-update-appointments" element={<CreateUpdateAppointment />} />
       <Route path="register-medical" element={<RegisterMedical />} />
     </Route>

@@ -7,9 +7,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link, Outlet } from "react-router-dom";
-import NavBarMovile from "../components/NavBarMovile";
-
-
+import { Container } from "@mui/material";
 
 // const navItems = ["Home", "Carta de especialistas", "Mis turnos"];
 
@@ -19,7 +17,6 @@ export default function NavBar() {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
-
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -54,9 +51,9 @@ export default function NavBar() {
         </Toolbar>
       </AppBar>
       
-      <Box component="main" pt={30}>
+      <Container sx={{ display: "flex", justifyContent:"center", flexDirection:"column", marginTop:"8vh"}}  >
         <Outlet />
-      </Box>
+      </Container>
     </Box>
   );
 }

@@ -13,6 +13,7 @@ import RegisterMedical from "../pages/RegisterMedical";
 import CreateUpdateAppointment from "../pages/CreateUpdateAppointment";
 import Medicals from "../pages/Medicals";
 import MedicalScheludes from "../pages/MedicalScheludes";
+import MedicalSchedules from "../pages/MedicalScheludes";
 import Home from "../pages/Home";
 import MainLayaout from "../pages/MainLayaout";
 import AccountInLayaout from "../pages/AccountInLayaout";
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
       <Route path="my-appointments" element={<Appointments />} />
       <Route path="medical-schedules" element={<MedicalScheludes />} />
       <Route path="medicals" element={<Medicals />} />
+      <Route path="/details/:id" element={<MedicalSchedules />} />
       <Route path="create-update-appointments" element={<CreateUpdateAppointment />} />
       <Route path="register-medical" element={<RegisterMedical />} />
       <Route path="*" element={<ErrorPage />} />

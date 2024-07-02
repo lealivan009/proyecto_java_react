@@ -6,8 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link, Outlet } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Link } from "react-router-dom";
 
 // const navItems = ["Home", "Carta de especialistas", "Mis turnos"];
 
@@ -37,7 +36,10 @@ export default function NavBar() {
           >
             AlMedin
           </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          <Box sx={{ display: { xs: "none", sm: "block" }}}>
+            <Link to={"/account/login"}  >
+              <Button variant="contained" color="secondary">Ingresar</Button>
+            </Link>
             <Link to={"home"}>
               <Button sx={{ color: "#fff" }}>Home</Button>
             </Link>
@@ -45,15 +47,11 @@ export default function NavBar() {
               <Button sx={{ color: "#fff" }}>Carta especialistas</Button>
             </Link>
             <Link to={"my-appointments"}>
-              <Button sx={{ color: "#fff" }}>Mis turnos</Button>
+              <Button  sx={{ color: "#fff" }}>Mis turnos</Button>
             </Link>
           </Box>
         </Toolbar>
       </AppBar>
-      
-      <Container sx={{ display: "flex", justifyContent:"center", flexDirection:"column", marginTop:"8vh"}}  >
-        <Outlet />
-      </Container>
     </Box>
   );
 }

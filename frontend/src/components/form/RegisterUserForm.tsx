@@ -7,7 +7,7 @@ import { useState } from "react";
 import { registerUser } from "../../services/user.service";
 import { dateFormat } from "../../utils/date-formatter";
 
-export default function CustomForm() {
+export default function RegisterUserForm() {
   const [sendForm, setSendForm] = useState(false);
 
   const initialValues: RegisterUser = {

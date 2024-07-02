@@ -19,9 +19,20 @@ export const registerUserScheme = yup.object().shape({
     password: 
         yup.string()
         .min(8, "Minimo 8 caracteres")
-        .matches(passwordRegex, "Por favor ingrese un email valido")
+        .matches(passwordRegex, "Por favor ingrese una contraseña valida")
         .required("La contraseña es requerida"),
     repeatPassword: 
         yup.string()
         .oneOf([yup.ref('password')], "La contraseña no coincide")
+})
+
+export const loginUserScheme = yup.object().shape({
+    email: 
+    yup.string().email("Por favor ingrese un email valido")
+    .required("El mail es requerido"),
+password: 
+    yup.string()
+    .min(8, "Minimo 8 caracteres")
+    .matches(passwordRegex, "Por favor ingrese una contraseña valida")
+    .required("La contraseña es requerida"),
 })

@@ -1,5 +1,6 @@
 import { Container, Typography } from "@mui/material";
-import CustomForm from "../components/form/CustomForm";
+import RegisterUserForm from "../components/form/RegisterUserForm";
+import { Link } from "react-router-dom";
 
 export default function Register() {
   return (
@@ -8,7 +9,7 @@ export default function Register() {
         Registrate como usuario
       </Typography>
       <Container maxWidth="md" >
-        <CustomForm />
+        <RegisterUserForm />
       </Container>
     </>
   );

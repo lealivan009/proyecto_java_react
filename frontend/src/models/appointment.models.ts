@@ -11,3 +11,10 @@ export interface RegisterAppointment extends AbstractAppointment {
 
 export interface UpdateAppointment extends AbstractAppointment {
 }
+
+export interface Appointment {
+    id: string
+    patient_name: string,
+    consultingReason: string,
+    consultingDate: Date
+}

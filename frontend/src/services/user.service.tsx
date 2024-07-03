@@ -24,3 +24,8 @@ export const loginUser = async ( user: LoginUser ) => {
    const res = await axios.post(`${BASE_URL}/users/login`, user);
    return res.data;
 }
+
+export const getAppointments = async ( userId : string|null) => {
+   const res = await axios.get(`${BASE_URL}/users/${userId}/appointments`);
+   return res.data;
+} 

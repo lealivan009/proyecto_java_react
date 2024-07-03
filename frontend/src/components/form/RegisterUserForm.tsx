@@ -5,7 +5,6 @@ import { Button, Grid, Paper, Typography } from "@mui/material";
 import CustomInput from "./CustomInput";
 import { useState } from "react";
 import { registerUser } from "../../services/user.service";
-import { dateFormat } from "../../utils/date-formatter";
 
 export default function RegisterUserForm() {
   const [sendForm, setSendForm] = useState(false);
@@ -17,19 +16,20 @@ export default function RegisterUserForm() {
     email: "",
     password: "",
     repeatPassword: "",
-    birthDate: new Date(),
     photo: "",
   };
 
-  const onSubmit = async (values, actions): Promise<any> => {
+  const onSubmit = async (values, actions)  => {
     try {
-      values.birthDate = dateFormat(new Date("1999-10-27"));
-      const response = await registerUser(values);
-      console.log(response.status);
+      const {data, codeStatus} = await registerUser(values);
+       console.log(data, codeStatus);
       actions.resetForm();
       setSendForm(!sendForm);
     } catch (error) {
-      console.log(error.response.data);
+      const code = error.response.data.codeStatus;
+      if(code != 201){
+        alert("Este email ya esta registrado!");
+      }
     }
   };
 

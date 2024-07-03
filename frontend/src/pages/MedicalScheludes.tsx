@@ -70,7 +70,7 @@ const MedicalSchedules = () => {
       consultingReason: "Dolores de pecho",
       consultingDate: "09:00:00.123456789", // Aquí puedes ajustar el formato de la fecha/hora si es necesario
       medicalId: id,
-      userId: "f5bfaee4-fc73-45ad-a5b4-a4ab0e3e0eb8",
+      userId: localStorage.getItem("userId"),
     };
 
     try {

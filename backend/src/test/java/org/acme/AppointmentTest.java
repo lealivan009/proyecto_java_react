@@ -68,7 +68,7 @@ public class AppointmentTest{
         //llamo al verdadero metodo con los datos de la prueba cargados 
         appointmentService.createAppointment(appointmentDto);
 
-        Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto);
+        Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto, null, null);
         //when(appointmentRepository.persist(any())).thenReturn(appointment);
         
         // verifico que se llamaron los métodos necesarios con los argumentos correctos

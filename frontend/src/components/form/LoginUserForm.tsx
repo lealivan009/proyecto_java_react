@@ -1,5 +1,5 @@
-import { Button, CircularProgress, Grid, Paper } from "@mui/material";
-import { LoginUser, User } from "../../models/user.models";
+import { Button,  Grid, Paper } from "@mui/material";
+import { LoginUser } from "../../models/user.models";
 import CustomInput from "./CustomInput";
 import { Form, Formik } from "formik";
 import { loginUserScheme } from "../../utils/scheme";
@@ -18,9 +18,10 @@ export default function LoginUserForm() {
   const onSubmit = async (values: LoginUser)=>{
       const { id } = await loginUser(values);
       setId(id);
+      localStorage.setItem("userId", id);
     }
   
-  if(id != null) return <Navigate to={"home/"+id } />
+  if(id != null) return <Navigate to={"../../home"} />
   
   return (
     <Formik

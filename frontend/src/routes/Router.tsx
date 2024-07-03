@@ -27,7 +27,7 @@ const router = createBrowserRouter(
         <Route path="register" element={<Register />} />
       </Route>
 
-      <Route path="home/:id" element={<Home />} />
+      <Route path="home" element={<Home />} />
       <Route path="my-appointments" element={<Appointments />} />
       <Route path="medical-schedules" element={<MedicalScheludes />} />
       <Route path="medicals" element={<Medicals />} />

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,6 +11,7 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
+import { getMedicals } from "../services/medical.service";
 
 const Medicals = () => {
   // Estados para almacenar los datos de los médicos y especialidades
@@ -26,7 +26,7 @@ const Medicals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/medicals");
+        const response = await getMedicals();
         setMedicals(response.data); // Almacenar todos los médicos obtenidos
         setFilteredMedicals(response.data); // Almacenar todos los médicos como inicialmente filtrados
 

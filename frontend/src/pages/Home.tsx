@@ -1,29 +1,19 @@
+import { useUser } from "../hooks/useUser";
+import { Container, Paper } from "@mui/material";
 
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { User } from "../models/user.models";
-import { getUserById } from "../services/user.service";
-import { Container } from "@mui/material";
+export default function Home() {
+  const {user, getUser} = useUser()
+  const userId = localStorage.getItem("userId");
 
-export default function Home(){
-  const [user, setUser] = useState<User|null>(null);
-  const { id } = useParams<string>();
-
-  useEffect(() =>{
-    const fetchData = async () =>{
-      try {
-        const user = await getUserById(id)
-        setUser(user)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchData()
-  }, [])
+  getUser(userId);
 
   return (
     <Container>
-      <div>{user?.email}</div>
+      <Paper>
+        <div>{user?.name}</div>
+        <div>{user?.lastname}</div>
+        <div>{user?.email}</div>
+      </Paper>
     </Container>
   );
 }

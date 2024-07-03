@@ -14,54 +14,59 @@ import {
 } from "@mui/material";
 
 const Medicals = () => {
-  const [medicals, setMedicals] = useState([]);
-  const [filteredMedicals, setFilteredMedicals] = useState([]);
-  const [specialities, setSpecialities] = useState([]);
-  const [selectedSpeciality, setSelectedSpeciality] = useState("");
-  const [doctorName, setDoctorName] = useState("");
-  const navigate = useNavigate();
+  // Estados para almacenar los datos de los médicos y especialidades
+  const [medicals, setMedicals] = useState([]); // Todos los médicos obtenidos de la API
+  const [filteredMedicals, setFilteredMedicals] = useState([]); // Médicos filtrados según los criterios de búsqueda
+  const [specialities, setSpecialities] = useState([]); // Lista de especialidades únicas para el filtro
+  const [selectedSpeciality, setSelectedSpeciality] = useState(""); // Especialidad seleccionada en el filtro
+  const [doctorName, setDoctorName] = useState(""); // Nombre del doctor para filtrar
+  const navigate = useNavigate(); // Hook de React Router para la navegación
 
+  // Obtener la lista de médicos y especialidades al cargar el componente
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:8080/api/medicals");
-        setMedicals(response.data);
-        setFilteredMedicals(response.data);
+        setMedicals(response.data); // Almacenar todos los médicos obtenidos
+        setFilteredMedicals(response.data); // Almacenar todos los médicos como inicialmente filtrados
 
-        // Extract unique specialities for filter dropdown
+        // Extraer las especialidades únicas para el filtro desplegable
         const uniqueSpecialities = [
           ...new Set(response.data.map((medical) => medical.specialityType)),
         ];
-        setSpecialities(uniqueSpecialities);
+        setSpecialities(uniqueSpecialities); // Almacenar las especialidades únicas
       } catch (error) {
         console.error("Error fetching the data", error);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchData(); // Llamar a la función para obtener datos al montar el componente
+  }, []); // Se ejecuta solo una vez al cargar el componente, debido al arreglo vacío []
 
+  // Filtrar la lista de médicos cuando cambia la especialidad seleccionada o el nombre del doctor
   useEffect(() => {
     filterMedicals();
   }, [selectedSpeciality, doctorName]);
 
+  // Función para filtrar los médicos según los criterios seleccionados
   const filterMedicals = () => {
-    let filtered = medicals;
+    let filtered = medicals; // Iniciar con todos los médicos
     if (selectedSpeciality) {
       filtered = filtered.filter(
         (medical) => medical.specialityType === selectedSpeciality
-      );
+      ); // Filtrar por especialidad seleccionada
     }
     if (doctorName) {
       filtered = filtered.filter((medical) =>
         medical.fullname.toLowerCase().includes(doctorName.toLowerCase())
-      );
+      ); // Filtrar por nombre del doctor (insensible a mayúsculas/minúsculas)
     }
-    setFilteredMedicals(filtered);
+    setFilteredMedicals(filtered); // Actualizar la lista de médicos filtrados
   };
 
+  // Función para manejar la navegación al detalle de un médico
   const handleViewDetails = (id) => {
-    navigate(`/details/${id}`);
+    navigate(`/details/${id}`); // Redirigir a la ruta de detalles con el ID del médico
   };
 
   return (
@@ -70,6 +75,7 @@ const Medicals = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         Medical List
       </Typography>
+      {/* Campo de texto para filtrar por especialidad */}
       <TextField
         label="Filter by Speciality"
         select
@@ -84,6 +90,7 @@ const Medicals = () => {
           </MenuItem>
         ))}
       </TextField>
+      {/* Campo de texto para filtrar por nombre del doctor */}
       <TextField
         label="Filter by Doctor Name"
         value={doctorName}
@@ -91,6 +98,7 @@ const Medicals = () => {
         fullWidth
         margin="normal"
       />
+      {/* Lista de médicos filtrados */}
       <Paper elevation={3}>
         <List>
           {filteredMedicals.map((medical) => (
@@ -99,6 +107,7 @@ const Medicals = () => {
                 primary={medical.fullname}
                 secondary={medical.specialityType}
               />
+              {/* Botón para ver detalles del médico */}
               <Button
                 variant="contained"
                 color="success"

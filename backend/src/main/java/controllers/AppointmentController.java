@@ -35,12 +35,6 @@ public class AppointmentController {
         return Response.ok(appointmentService.getAllAppointments()).build();
     }
 
-    @GET
-    @Path("/users/{userId}")
-    public Response getApointmentsByUser(@PathParam("userId") UUID userId){
-        return Response.ok(appointmentService.getAllByUser(userId)).build();
-    }
-
     @AppointmentSwaggerDocs.CreateAppointment
     @POST
     public Response createAppointment(AppointmentDto appointmentDto) throws Exception{
@@ -66,7 +60,7 @@ public class AppointmentController {
             return Response.status(Response.Status.OK).entity("Turno médico actualizado exitosamente").build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        } catch (Exception e) {
+        } catch (Exception e) {   
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error interno del servidor").build();
         }
     }

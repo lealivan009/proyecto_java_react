@@ -1,5 +1,6 @@
 package controllers;
 
+import services.AppointmentService;
 import services.UserService;
 
 
@@ -22,6 +23,8 @@ public class UserController {
 
     @Inject
     private UserService userService;
+    @Inject
+    private AppointmentService appointmentService;
 
     @UserSwaggerDocs.RegisterUser
     @POST
@@ -59,6 +62,12 @@ public class UserController {
     public Response deleteUser(@PathParam("id") UUID id) throws Exception{
         userService.deleteUser(id);
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/{userId}/appointments")
+    public Response getApointmentsByUser(@PathParam("userId") UUID userId){
+        return Response.ok(appointmentService.getAllByUser(userId)).build();
     }
 
     @UserSwaggerDocs.GetAllUser

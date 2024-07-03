@@ -35,6 +35,12 @@ public class AppointmentController {
         return Response.ok(appointmentService.getAllAppointments()).build();
     }
 
+    @GET
+    @Path("/users/{userId}")
+    public Response getApointmentsByUser(@PathParam("userId") UUID userId){
+        return Response.ok(appointmentService.getAllByUser(userId)).build();
+    }
+
     @AppointmentSwaggerDocs.CreateAppointment
     @POST
     public Response createAppointment(AppointmentDto appointmentDto) throws Exception{

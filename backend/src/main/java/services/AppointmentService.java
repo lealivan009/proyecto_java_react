@@ -6,6 +6,7 @@ import models.Appointment;
 import java.util.UUID;
 import dto.request.AppointmentDto;
 import dto.request.NewAppointmentDto;
+import dto.response.AppointmentDtoResponse;
 import exceptions.AppointmentCancellationException;
 import exceptions.ConsultationScheduleException;
 import exceptions.EntityNotFoundException;
@@ -30,6 +31,8 @@ public interface AppointmentService {
      * @return un Appointment
      */
     public Appointment getAppointmentById(UUID id);
+
+    public List<AppointmentDtoResponse> getAllByUser(UUID userId);
 
     /**
      * Modifica algun turno medico con 1 dia de anticipacion en la base de datos

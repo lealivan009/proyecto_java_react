@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,6 +9,9 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import { getAppointments } from "../services/user.service";
+import { Appointment } from "../models/appointment.models";
+import { dateFormat } from "../utils/date-formatter";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -18,9 +20,7 @@ const Appointments = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/users/${userId}/appointments`
-        );
+        const response = await getAppointments(userId);
         setAppointments(response.data);
       } catch (error) {
         console.error("Error fetching appointments:", error);
@@ -44,9 +44,9 @@ const Appointments = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {appointments.map((appointment) => (
+            {appointments != null && appointments.map((appointment: Appointment) => (
               <TableRow key={appointment.id}>
-                <TableCell>{appointment.consultingDate}</TableCell>
+                <TableCell>{dateFormat(appointment.consultingDate)}</TableCell>
                 <TableCell>{appointment.consultingReason}</TableCell>
               </TableRow>
             ))}

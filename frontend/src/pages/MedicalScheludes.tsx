@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {
@@ -15,6 +15,9 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import { getMedicalById } from "../services/medical.service";
+import { registerAppoinment } from "../services/appointment.service";
+import { RegisterAppointment } from "../models/appointment.models";
 
 const MedicalSchedules = () => {
   // Obtener el parámetro 'id' de la URL
@@ -28,10 +31,8 @@ const MedicalSchedules = () => {
     // Función para obtener los datos del médico desde la API
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/medicals/${id}`
-        );
-        setMedical(response.data); // Almacenar los datos del médico en el estado
+        const data = await getMedicalById(id);
+        setMedical(data); // Almacenar los datos del médico en el estado
       } catch (error) {
         console.error("Error fetching the data", error);
       }
@@ -65,21 +66,18 @@ const MedicalSchedules = () => {
   const handleRequestAppointment = async (startTime) => {
     console.log(startTime);
     // Datos del turno a enviar en la petición POST
-    const appointmentData = {
+    const appointmentData: RegisterAppointment = {
       patient_name: "Ivan",
       consultingReason: "Dolores de pecho",
-      consultingDate: "09:00:00.123456789", // Aquí puedes ajustar el formato de la fecha/hora si es necesario
+      consultingDate: new Date("09:00:00.123456789"), // Aquí puedes ajustar el formato de la fecha/hora si es necesario
       medicalId: id,
       userId: localStorage.getItem("userId"),
     };
 
     try {
       // Hacer la petición POST para crear el turno
-      const response = await axios.post(
-        "http://localhost:8080/api/appointments",
-        appointmentData
-      );
-      console.log("Appointment created:", response.data);
+      const data = await registerAppoinment(appointmentData);
+      console.log("Appointment created:", data);
       // Mostrar mensaje de éxito
       setMessage({ type: "success", text: "Turno creado exitosamente" });
     } catch (error) {

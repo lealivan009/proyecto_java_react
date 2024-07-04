@@ -5,7 +5,7 @@ interface AbstractMedical {
     fullname: string,
     matricule: string,
     consultingPlace: string,
-    medicalSpeciality: Speciality,
+    specialityType: Speciality,
 }
 
 export interface Medical extends AbstractMedical{

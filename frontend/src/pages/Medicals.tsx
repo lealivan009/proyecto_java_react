@@ -12,6 +12,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { getMedicals } from "../services/medical.service";
+import { Medical } from "../models/medical.models";
 
 const Medicals = () => {
   // Estados para almacenar los datos de los médicos y especialidades
@@ -26,13 +27,13 @@ const Medicals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getMedicals();
-        setMedicals(response.data); // Almacenar todos los médicos obtenidos
-        setFilteredMedicals(response.data); // Almacenar todos los médicos como inicialmente filtrados
+        const data = await getMedicals();
+        setMedicals(data); // Almacenar todos los médicos obtenidos
+        setFilteredMedicals(data); // Almacenar todos los médicos como inicialmente filtrados
 
         // Extraer las especialidades únicas para el filtro desplegable
         const uniqueSpecialities = [
-          ...new Set(response.data.map((medical) => medical.specialityType)),
+          ...new Set(data.map((medical) => medical.specialityType)),
         ];
         setSpecialities(uniqueSpecialities); // Almacenar las especialidades únicas
       } catch (error) {

@@ -12,7 +12,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import { getMedicals } from "../services/medical.service";
-import { Medical } from "../models/medical.models";
 
 const Medicals = () => {
   // Estados para almacenar los datos de los médicos y especialidades

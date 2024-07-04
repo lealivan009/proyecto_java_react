@@ -69,7 +69,7 @@ const MedicalSchedules = () => {
     const appointmentData: RegisterAppointment = {
       patient_name: "Ivan",
       consultingReason: "Dolores de pecho",
-      consultingDate: new Date("09:00:00.123456789"), // Aquí puedes ajustar el formato de la fecha/hora si es necesario
+      consultingDate: new Date("11:00:00.123456789"), // Aquí puedes ajustar el formato de la fecha/hora si es necesario
       medicalId: id,
       userId: localStorage.getItem("userId"),
     };

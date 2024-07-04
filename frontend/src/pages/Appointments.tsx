@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { getAppointments } from "../services/user.service";
 import { Appointment } from "../models/appointment.models";
-import { dateFormat } from "../utils/date-formatter";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -21,7 +20,7 @@ const Appointments = () => {
     const fetchAppointments = async () => {
       try {
         const response = await getAppointments(userId);
-        setAppointments(response.data);
+        setAppointments(response);
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }
@@ -44,12 +43,13 @@ const Appointments = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {appointments != null && appointments.map((appointment: Appointment) => (
-              <TableRow key={appointment.id}>
-                <TableCell>{dateFormat(appointment.consultingDate)}</TableCell>
-                <TableCell>{appointment.consultingReason}</TableCell>
-              </TableRow>
-            ))}
+            {appointments != null &&
+              appointments.map((appointment: Appointment) => (
+                <TableRow key={appointment.id}>
+                  <TableCell>{appointment.consultingDate}</TableCell>
+                  <TableCell>{appointment.consultingReason}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

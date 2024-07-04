@@ -6,20 +6,21 @@ import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link, Outlet } from "react-router-dom";
-import NavBarMovile from "../components/NavBarMovile";
-
-
-
-// const navItems = ["Home", "Carta de especialistas", "Mis turnos"];
+import { Link, useNavigate } from "react-router-dom";
 
 export default function NavBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const isLoggedIn = localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userId"); // Eliminar el valor del localStorage al hacer logout
+    navigate("/account/login"); // Redirigir al usuario a la página de login
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -41,22 +42,39 @@ export default function NavBar() {
             AlMedin
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Link to={"home"}>
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to={"/"}
+                  onClick={handleLogout}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Button variant="contained" color="secondary">
+                    Cerrar sesión
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to={"/account/login"} style={{ textDecoration: "none" }}>
+                  <Button variant="contained" color="secondary">
+                    Iniciar sesión
+                  </Button>
+                </Link>
+              </>
+            )}
+            <Link to={"/home"}>
               <Button sx={{ color: "#fff" }}>Home</Button>
             </Link>
-            <Link to={"medicals"}>
+            <Link to={"/medicals"}>
               <Button sx={{ color: "#fff" }}>Carta especialistas</Button>
             </Link>
-            <Link to={"my-appointments"}>
+            <Link to={"/my-appointments"}>
               <Button sx={{ color: "#fff" }}>Mis turnos</Button>
             </Link>
           </Box>
         </Toolbar>
       </AppBar>
-      
-      <Box component="main" pt={30}>
-        <Outlet />
-      </Box>
     </Box>
   );
 }

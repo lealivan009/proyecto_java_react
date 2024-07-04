@@ -20,6 +20,7 @@ public class PrescriptionMapper {
 
     public static PrescriptionDtoResponse entityToDto(Prescription entity) {
         return new PrescriptionDtoResponse(
+            entity.getId(),
             entity.getPatientName(), 
             entity.getMedicamentDescription(), 
             entity.getPosology(), 

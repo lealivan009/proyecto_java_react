@@ -11,6 +11,7 @@ import java.util.List;
 import models.Appointment;
 import models.Medical;
 import models.Schedules;
+import models.User;
 import repositories.AppointmentRepository;
 import services.MedicalService;
 import services.UserService;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 import dto.request.AppointmentDto;
 import dto.request.NewAppointmentDto;
+import dto.response.AppointmentDtoResponse;
 import exceptions.AppointmentCancellationException;
 import exceptions.ConsultationScheduleException;
 import exceptions.EntityNotFoundException;
@@ -65,7 +67,7 @@ public class AppointmentServiceImp implements AppointmentService{
         //valido que los campos de appointment no vengan vacios
         validator.validate(appointmentDto);
         //busco que el usuario coincida con el usuario del turno y sino coincide ya larga la excepcion en el service
-        userService.findUserById(appointmentDto.userId());
+        User user = userService.findUserById(appointmentDto.userId());
         Medical medical = medicalService.getMedicalById(appointmentDto.medicalId()); //idem
 
         //Obtener la lista de horarios de consulta del médico
@@ -88,8 +90,8 @@ public class AppointmentServiceImp implements AppointmentService{
             throw new ConsultationScheduleException();
         }else{
             //Uso la clase mapper para pasar de dto a entidad
-            Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto);
-            appointmentRepository.persist(appointment); //metodo que me da Panache en el repository para crear el nuevo turno en la bd
+            Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto, user, medical);
+            appointmentRepository.persist(appointment);
         }
     }
 
@@ -167,5 +169,9 @@ public class AppointmentServiceImp implements AppointmentService{
 
         //metodo que me da Panache en el repository para persistir en la bd
         appointmentRepository.persist(appointment);
+    }
+
+    public List<AppointmentDtoResponse> getAllByUser(UUID userId) {
+       return appointmentRepository.getAllByUser(userId);
     }
 }

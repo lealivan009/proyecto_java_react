@@ -1,6 +1,19 @@
+import { useUser } from "../hooks/useUser";
+import { Container, Paper } from "@mui/material";
 
-export const Home = () => {
+export default function Home() {
+  const {user, getUser} = useUser()
+  const userId = localStorage.getItem("userId");
+
+  getUser(userId);
+
   return (
-    <div>Home</div>
-  )
+    <Container>
+      <Paper>
+        <div>{user?.name}</div>
+        <div>{user?.lastname}</div>
+        <div>{user?.email}</div>
+      </Paper>
+    </Container>
+  );
 }

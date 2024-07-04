@@ -3,7 +3,7 @@ interface AbstractUser {
     name: string,
     lastname: string,
     dni: string,
-    birthDate: string,
+    birthDate?: Date,
     photo: string,
 }
 

@@ -5,10 +5,10 @@ export function ErrorPage () {
 
     return(
         <div id="error-page" >
-            <h1>Oops!</h1>
-            <p>Sorry, an unexpected error has occurred.</p>
+            <h1>Not Found!</h1>
+            <p>La pagina a la que intenta acceder no existe!</p>
             <p>
-                <i>{error.statusText || error.message}</i>
+                <i>{error?.statusText || error?.message}</i>
             </p>
         </div>
     );

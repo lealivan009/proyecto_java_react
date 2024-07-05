@@ -1,5 +1,6 @@
 package dto.request;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -10,7 +11,8 @@ import jakarta.validation.constraints.NotNull;
 public record AppointmentDto(
     @NotBlank(message = "Name the patient is mandatory!") String patient_name,
     @NotBlank(message = "A consulting reason mandatory!")String consultingReason, 
-    @NotNull(message = "Cosulting date is needed!") LocalTime consultingDate, 
+    @NotNull(message = "Cosulting date is needed!") LocalTime consultingDate,
+    @NotNull(message = "Cosulting date is needed!")  DayOfWeek nameDay, 
     UUID medicalId, 
     UUID userId
 ) {}

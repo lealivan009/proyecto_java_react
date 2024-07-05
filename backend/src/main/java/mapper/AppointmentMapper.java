@@ -13,6 +13,7 @@ public class AppointmentMapper {
                 .patientName(appointmentDto.patient_name())
                 .consultingReason(appointmentDto.consultingReason())
                 .consultingDate(appointmentDto.consultingDate())
+                .nameDay(appointmentDto.nameDay())
                 .user(user)
                 .medicalSpecialist(medical)
                 .build();
@@ -21,6 +22,7 @@ public class AppointmentMapper {
     public static AppointmentDtoResponse entityToDtoResponse(Appointment entity){
         return new AppointmentDtoResponse(
             entity.getId(),
+            entity.getNameDay(),
             entity.getPatientName(),
             entity.getConsultingReason(),
             entity.getConsultingDate()
@@ -32,6 +34,7 @@ public class AppointmentMapper {
             appointment.getPatientName(),
             appointment.getConsultingReason(),
             appointment.getConsultingDate(),
+            appointment.getNameDay(),
             appointment.getMedicalSpecialist().getId(),
             appointment.getUser().getId()
         );

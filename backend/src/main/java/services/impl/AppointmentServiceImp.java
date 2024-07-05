@@ -18,6 +18,7 @@ import services.UserService;
 import validator.Validator;
 import services.AppointmentService;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 import java.util.UUID;
@@ -66,33 +67,16 @@ public class AppointmentServiceImp implements AppointmentService{
     public void createAppointment(AppointmentDto appointmentDto) throws InvalidFieldException, EntityNotFoundException, ConsultationScheduleException{
         //valido que los campos de appointment no vengan vacios
         validator.validate(appointmentDto);
-        //busco que el usuario coincida con el usuario del turno y sino coincide ya larga la excepcion en el service
-        User user = userService.findUserById(appointmentDto.userId());
-        Medical medical = medicalService.getMedicalById(appointmentDto.medicalId()); //idem
 
-        //Obtener la lista de horarios de consulta del médico
-        List<Schedules> consultingDates = medical.getConsultingDates();
+        User user = userService.findUserById(appointmentDto.userId());
+        Medical medical = medicalService.getMedicalById(appointmentDto.medicalId()); 
+
+        Schedules consultingDate = getScheduleOfMedicalByDay(medical, appointmentDto.nameDay());
+
+        validateShcedule(appointmentDto.consultingDate(), consultingDate);
         
-        //Verificar si el horario del nuevo turno está dentro de algún horario de consulta del medico
-        LocalTime newConsultingDate = appointmentDto.consultingDate(); //horario del nuevo turno
-        boolean disponible = false;
-        for (Schedules schedule : consultingDates) { //recorro la franja horaria de consultas del medico
-            LocalTime startTime = schedule.getStartTime();
-            LocalTime endTime = schedule.getEndTime();
-            if (newConsultingDate.isAfter(startTime) && newConsultingDate.isBefore(endTime)) {
-                disponible = true;
-                break;
-            }
-        }
-        
-        //Si el horario del nuevo turno no está dentro de ningún horario de consulta, lanzar una excepción, sino crear el nuevo turno
-        if (!disponible) {
-            throw new ConsultationScheduleException();
-        }else{
-            //Uso la clase mapper para pasar de dto a entidad
-            Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto, user, medical);
-            appointmentRepository.persist(appointment);
-        }
+        Appointment appointment = AppointmentMapper.dtoToAppointment(appointmentDto, user, medical);
+        appointmentRepository.persist(appointment);
     }
 
     @Transactional
@@ -119,45 +103,31 @@ public class AppointmentServiceImp implements AppointmentService{
         }
     }
 
-    @Transactional
+    @Transactional()
     public void updateAppointment(UUID idAppointment, NewAppointmentDto newAppointmentDto) throws EntityNotFoundException, ConsultationScheduleException {
         //Obtener el turno médico a actualizar
-        Appointment appointment = appointmentRepository.findById(idAppointment);
-        
-        // Verificar si el turno médico existe
-        if (appointment == null) {
-            throw new EntityNotFoundException("Medical schedele not found with id " + idAppointment);
-        }
+        Appointment appointment = appointmentRepository.findByIdOptional(idAppointment)
+            .orElseThrow(()->new EntityNotFoundException("Medical appointment not found with id " + idAppointment));
+  
         
         // Verificar si hay cambios en la fecha y hora de la cita
         if (newAppointmentDto.consultingDate() != null) {
-            // Verificar si la nueva fecha y hora de la cita están dentro de los horarios de consulta del médico
-            Medical medical = appointment.getMedicalSpecialist();
-            List<Schedules> consultingDates = medical.getConsultingDates();
-            LocalTime updatedConsultingDate = newAppointmentDto.consultingDate();
 
-            boolean disponible = false;
-            for (Schedules schedule : consultingDates) {
-                LocalTime startTime = schedule.getStartTime();
-                LocalTime endTime = schedule.getEndTime();
-                if (updatedConsultingDate.isAfter(startTime) && updatedConsultingDate.isBefore(endTime)) {
-                    disponible = true;
-                    break;
-                }
-            }
-            if (!disponible) {
-                throw new ConsultationScheduleException();
-            } else{
-                // Actualizar la fecha y hora de la cita
-                appointment.setConsultingDate(newAppointmentDto.consultingDate());
-            }
+            Schedules schedule =  getScheduleOfMedicalByDay(appointment.getMedicalSpecialist(), newAppointmentDto.nameDay());
+
+            validateShcedule(newAppointmentDto.consultingDate(), schedule);
+            
+            appointment.setConsultingDate(newAppointmentDto.consultingDate());
         }
 
         // Verificar si hay cambios en el ID del médico especialista
         if (newAppointmentDto.medicalId() != null) {
 
             Medical medical = medicalService.getMedicalById(newAppointmentDto.medicalId());
-            // Asignar el nuevo médico especialista al turno médico
+            Schedules schedule = getScheduleOfMedicalByDay(medical, newAppointmentDto.nameDay());
+
+            validateShcedule(appointment.getConsultingDate(), schedule);
+
             appointment.setMedicalSpecialist(medical);
         }
 
@@ -166,9 +136,21 @@ public class AppointmentServiceImp implements AppointmentService{
             // Actualizar el motivo de la consulta
             appointment.setConsultingReason(newAppointmentDto.consultingReason());
         }
-
-        //metodo que me da Panache en el repository para persistir en la bd
+    
+        appointment.setNameDay(newAppointmentDto.nameDay());
         appointmentRepository.persist(appointment);
+    }
+
+    private void validateShcedule(LocalTime newDateConsulting, Schedules consultingDate) throws ConsultationScheduleException{
+        if (!newDateConsulting.isAfter(consultingDate.getStartTime()) ||  !newDateConsulting.isBefore(consultingDate.getEndTime()))  
+            throw new ConsultationScheduleException();
+    }
+
+    private Schedules getScheduleOfMedicalByDay(Medical medical, DayOfWeek day){
+        return medical.getConsultingDates()
+            .stream()
+            .filter(s -> s.getNameDay().equals(day))
+            .findFirst().get();
     }
 
     public List<AppointmentDtoResponse> getAllByUser(UUID userId) {

@@ -3,6 +3,8 @@ package models;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -13,6 +15,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
@@ -28,6 +32,9 @@ public class Appointment extends BaseEntity {
 
     @Column(name="consulting_date")
     private LocalTime consultingDate;
+
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek nameDay;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "medical_specialist_id")

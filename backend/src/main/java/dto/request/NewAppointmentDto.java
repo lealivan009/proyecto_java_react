@@ -1,5 +1,6 @@
 package dto.request;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -7,5 +8,6 @@ import java.util.UUID;
 public record NewAppointmentDto(
     String consultingReason,
     LocalTime consultingDate,
+    DayOfWeek nameDay,
     UUID medicalId
 ) {}

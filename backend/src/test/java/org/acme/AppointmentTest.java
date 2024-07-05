@@ -50,7 +50,7 @@ public class AppointmentTest{
         //simulo los datos que un usuario ingresa al sistema
         AppointmentDto appointmentDto = new AppointmentDto(
             "Roberto", "Razon consulta", 
-            LocalTime.now(), UUID.randomUUID(), UUID.randomUUID());
+            LocalTime.now(), DayOfWeek.MONDAY, UUID.randomUUID(), UUID.randomUUID());
 
         when(userService.findUserById(any(UUID.class))).thenReturn(new User(
             "robert", "robert1234", "foto", "Roberto", "Baez", 

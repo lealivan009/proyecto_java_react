@@ -38,6 +38,7 @@ const Appointments = () => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Dia de Consulta</TableCell>
               <TableCell>Fecha de Consulta</TableCell>
               <TableCell>Motivo</TableCell>
             </TableRow>
@@ -46,6 +47,7 @@ const Appointments = () => {
             {appointments != null &&
               appointments.map((appointment: Appointment) => (
                 <TableRow key={appointment.id}>
+                  <TableCell>{appointment.nameDay}</TableCell>
                   <TableCell>{appointment.consultingDate}</TableCell>
                   <TableCell>{appointment.consultingReason}</TableCell>
                 </TableRow>

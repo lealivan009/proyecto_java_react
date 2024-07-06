@@ -9,7 +9,6 @@ export const useUser = () =>{
         useEffect(()=>{
             getUserById(id)
             .then(data => setUser(data))
-            .catch((error) => console.log(error))
         },[])
     }
 

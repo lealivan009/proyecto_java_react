@@ -1,7 +1,10 @@
+import { DayOfWeek } from "./enums/days.models"
+
 interface AbstractAppointment {
     consultingReason: string,
     consultingDate: Date,
     medicalId: string
+    nameDay: DayOfWeek
 }
 
 export interface RegisterAppointment extends AbstractAppointment {
@@ -16,5 +19,6 @@ export interface Appointment {
     id: string
     patient_name: string,
     consultingReason: string,
-    consultingDate: Date
+    consultingDate: Date,
+    nameDay: DayOfWeek
 }

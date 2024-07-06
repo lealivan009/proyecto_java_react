@@ -11,4 +11,5 @@ export interface UpdateSchedule extends AbstractSchedule {
 }
 
 export interface Schedule extends AbstractSchedule {
+    id: string
 }

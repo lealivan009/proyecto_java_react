@@ -4,3 +4,10 @@ export function dateFormat(date: Date){
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 } 
+
+export function validateSchedule(startTime, endTime, consultingDate){
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+    return (consultingDate <= start && consultingDate >= end);
+
+}

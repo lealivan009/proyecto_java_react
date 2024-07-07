@@ -11,7 +11,7 @@ export const getMedicalById = async (id: string)  => {
     return res.data;
 }
 
-export const registerMedicals = async (id: string, data: RegisterMedical) =>{
-    const res = await axiosInstance.put(`/medicals/${id}`, data);
+export const registerMedicals = async (data: RegisterMedical) =>{
+    const res = await axiosInstance.post(`/medicals/register`, data);
     return res.data;
 }

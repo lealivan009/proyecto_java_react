@@ -1,44 +1,34 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
 import {
-  Container,
+  Alert,
+  Button,
   Card,
   CardContent,
-  Typography,
+  Container,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Button,
-  Snackbar,
-  Alert,
+  Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { getMedicalById } from "../services/medical.service";
-import { registerAppoinment } from "../services/appointment.service";
-import { RegisterAppointment } from "../models/appointment.models";
 
 const MedicalSchedules = () => {
-  // Obtener el parámetro 'id' de la URL
+  const navigate = useNavigate();
   const { id } = useParams();
-  // Estado para almacenar la información del médico
   const [medical, setMedical] = useState(null);
-  // Estado para almacenar el mensaje de éxito o error
   const [message, setMessage] = useState({ type: "", text: "" });
 
   useEffect(() => {
     // Función para obtener los datos del médico desde la API
     const fetchData = async () => {
-      try {
         const data = await getMedicalById(id);
         setMedical(data); // Almacenar los datos del médico en el estado
-      } catch (error) {
-        console.error("Error fetching the data", error);
-      }
     };
-
-    fetchData(); // Llamar a la función para obtener los datos
+    fetchData(); 
   }, [id]); // Ejecutar el efecto cuando cambia el 'id'
 
   // Mostrar un mensaje de carga mientras se obtienen los datos
@@ -62,27 +52,13 @@ const MedicalSchedules = () => {
     return dayOrder.indexOf(a.nameDay) - dayOrder.indexOf(b.nameDay);
   });
 
-  // Función para manejar la solicitud de turno
-  const handleRequestAppointment = async (startTime) => {
-    console.log(startTime);
-    // Datos del turno a enviar en la petición POST
-    const appointmentData: RegisterAppointment = {
-      patient_name: "Ivan",
-      consultingReason: "Dolores de pecho",
-      consultingDate: new Date("11:00:00.123456789"), // Aquí puedes ajustar el formato de la fecha/hora si es necesario
-      medicalId: id,
-      userId: localStorage.getItem("userId"),
-    };
-
+  //Función para manejar la solicitud de turno
+  const handleRequestAppointment = async (nameDay) => {
     try {
-      // Hacer la petición POST para crear el turno
-      const data = await registerAppoinment(appointmentData);
-      console.log("Appointment created:", data);
-      // Mostrar mensaje de éxito
-      setMessage({ type: "success", text: "Turno creado exitosamente" });
+      localStorage.setItem("nameDay", nameDay);
+      navigate("../../" + id + "/create-update-appointments");
     } catch (error) {
       console.error("Error creating appointment", error);
-      // Mostrar mensaje de error
       setMessage({
         type: "error",
         text: "Hubo un error y no se pudo crear el turno",
@@ -130,7 +106,7 @@ const MedicalSchedules = () => {
                         variant="contained"
                         color="primary"
                         onClick={() =>
-                          handleRequestAppointment(schedule.startTime)
+                          handleRequestAppointment(schedule.nameDay)
                         }
                       >
                         Solicitar turno

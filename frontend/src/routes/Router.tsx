@@ -6,18 +6,17 @@ import {
 } from "react-router-dom";
 
 //pages
+import AccountInLayaout from "../pages/AccountInLayaout";
 import Appointments from "../pages/Appointments";
+import CreateUpdateAppointment from "../pages/CreateUpdateAppointment";
+import { ErrorPage } from "../pages/ErrorPage";
+import Home from "../pages/Home";
 import Login from "../pages/Login";
+import MainLayaout from "../pages/MainLayaout";
+import Medicals from "../pages/Medicals";
+import { default as MedicalSchedules, default as MedicalScheludes } from "../pages/MedicalScheludes";
 import Register from "../pages/Register";
 import RegisterMedical from "../pages/RegisterMedical";
-import CreateUpdateAppointment from "../pages/CreateUpdateAppointment";
-import Medicals from "../pages/Medicals";
-import MedicalScheludes from "../pages/MedicalScheludes";
-import MedicalSchedules from "../pages/MedicalScheludes";
-import Home from "../pages/Home";
-import MainLayaout from "../pages/MainLayaout";
-import AccountInLayaout from "../pages/AccountInLayaout";
-import { ErrorPage } from "../pages/ErrorPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,8 +31,8 @@ const router = createBrowserRouter(
       <Route path="medical-schedules" element={<MedicalScheludes />} />
       <Route path="medicals" element={<Medicals />} />
       <Route path="/details/:id" element={<MedicalSchedules />} />
-      <Route path="create-update-appointments" element={<CreateUpdateAppointment />} />
-      <Route path="register-medical" element={<RegisterMedical />} />
+      <Route path=":id/create-update-appointments" element={<CreateUpdateAppointment />} />
+      <Route path="/register-medical" element={<RegisterMedical />} />
       <Route path="*" element={<ErrorPage />} />
     </Route>
   )

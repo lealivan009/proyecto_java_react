@@ -8,6 +8,7 @@ import {
   TableRow,
   Paper,
   Typography,
+  Button,
 } from "@mui/material";
 import { getAppointments } from "../services/user.service";
 import { Appointment } from "../models/appointment.models";
@@ -38,16 +39,20 @@ const Appointments = () => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Dia de Consulta</TableCell>
               <TableCell>Fecha de Consulta</TableCell>
               <TableCell>Motivo</TableCell>
+              <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {appointments != null &&
               appointments.map((appointment: Appointment) => (
                 <TableRow key={appointment.id}>
+                  <TableCell>{appointment.nameDay}</TableCell>
                   <TableCell>{appointment.consultingDate}</TableCell>
                   <TableCell>{appointment.consultingReason}</TableCell>
+                  <TableCell><Button></Button></TableCell>
                 </TableRow>
               ))}
           </TableBody>

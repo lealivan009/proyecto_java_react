@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik";
 import { RegisterUser } from "../../models/user.models";
-import { registerUserScheme } from "../../utils/scheme";
+import { registerUserScheme } from "../../utils/user-scheme";
 import { Button, Grid, Paper, Typography } from "@mui/material";
 import CustomInput from "./CustomInput";
 import { useState } from "react";

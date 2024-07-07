@@ -7,7 +7,6 @@ export const getAllUser = async () => {
 }
 
 export const getUserById = async ( id: string | null | undefined ) => {
-   console.log(id)
    const res = await axiosInstance.get(`/users/${id}`);
    return res.data;
 }

@@ -1,13 +1,14 @@
-import { FormControl, Input, InputLabel, Select, Typography } from '@mui/material';
+import { FormControl, InputLabel, Select, Typography } from '@mui/material';
 import { ErrorMessage, useField } from 'formik';
 
 export default function CustomSelect({label, ...props}: any) {
     const [field, meta] = useField(props);
     const {name} = props 
+    
     return (
     <>
         <FormControl>
-            <InputLabel>{label}</InputLabel>
+            <InputLabel >{label}</InputLabel>
             <Select 
                 {...field}
                 {...props}

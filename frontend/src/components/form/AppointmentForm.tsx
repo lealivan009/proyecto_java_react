@@ -6,7 +6,7 @@ import { useMedical } from '../../hooks/useMedical';
 import { RegisterAppointment } from '../../models/appointment.models';
 import { Schedule } from '../../models/schedule.models';
 import CustomInput from './CustomInput';
-import { validateSchedule } from '../../utils/date-formatter';
+import { validateSchedule } from '../../utils/date-utils';
 import { registerAppoinment } from '../../services/appointment.service';
 
 export default function AppointmentForm() {

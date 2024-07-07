@@ -1,11 +1,11 @@
-import { Speciality } from "./enums/speciality.models";
+import { SpecialityEnum } from "./enums/speciality.models";
 import { Schedule } from "./schedule.models";
 
 interface AbstractMedical {
     fullname: string,
     matricule: string,
     consultingPlace: string,
-    specialityType: Speciality,
+    medicalSpeciality: SpecialityEnum,
 }
 
 export interface Medical extends AbstractMedical{

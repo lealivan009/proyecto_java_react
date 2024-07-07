@@ -2,7 +2,7 @@ import { Button,  Grid, Paper } from "@mui/material";
 import { LoginUser } from "../../models/user.models";
 import CustomInput from "./CustomInput";
 import { Form, Formik } from "formik";
-import { loginUserScheme } from "../../utils/scheme";
+import { loginUserScheme } from "../../utils/user-scheme";
 import { loginUser } from "../../services/user.service";
 import { Navigate } from "react-router-dom";
 import { useState } from "react";

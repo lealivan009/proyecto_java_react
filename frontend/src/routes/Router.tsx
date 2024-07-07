@@ -31,8 +31,8 @@ const router = createBrowserRouter(
       <Route path="medical-schedules" element={<MedicalScheludes />} />
       <Route path="medicals" element={<Medicals />} />
       <Route path="/details/:id" element={<MedicalSchedules />} />
-      <Route index path=":id/create-update-appointments" element={<CreateUpdateAppointment />} />
-      <Route path="register-medical" element={<RegisterMedical />} />
+      <Route path=":id/create-update-appointments" element={<CreateUpdateAppointment />} />
+      <Route path="/register-medical" element={<RegisterMedical />} />
       <Route path="*" element={<ErrorPage />} />
     </Route>
   )
